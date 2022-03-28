@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "husky": "^7.0.4"
+  },
+  "scripts": {
+    "prepare": "husky install && yarn prepare:back && yarn prepare:front",
+    "prepare:front": "cd front && yarn install",
+    "prepare:back": "cd back && yarn install"
+  }
+}
