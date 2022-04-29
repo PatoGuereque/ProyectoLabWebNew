@@ -1,9 +1,7 @@
 import { GoogleLogin } from "react-google-login";
+import { GOOGLE_CLIENT_ID } from "../constants";
 
-const clientId =
-  "349938449398-8ghsv2tgnar1bmsmvqp868fh1n72q1nm.apps.googleusercontent.com";
-
-function Login() {
+const Login = () => {
   const responseGoogle = (response) => {
     console.log(response);
   };
@@ -11,7 +9,7 @@ function Login() {
   return (
     <div id="LoginButton">
       <GoogleLogin
-        clientId={clientId}
+        clientId={GOOGLE_CLIENT_ID}
         buttonText="Login"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
@@ -19,6 +17,6 @@ function Login() {
       />
     </div>
   );
-}
+};
 
 export default Login;
