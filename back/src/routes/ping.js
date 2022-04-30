@@ -1,8 +1,8 @@
-import express from "express";
+import express from 'express';
 
 const ping = express();
 
-ping.use("/ping", (_req, res) => {
+ping.use('/ping', (_req, res) => {
   res.status(200).json({
     pong: new Date().getTime(),
   });
