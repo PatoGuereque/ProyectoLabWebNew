@@ -1,6 +1,5 @@
 import express from 'express';
 import passport from 'passport';
-import { authRequired } from '../middleware/auth-required';
 
 import('../controllers/auth-controller');
 
@@ -17,19 +16,13 @@ auth.get(
   '/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/',
-    successRedirect: '/profile',
+    successRedirect: '/',
   })
 );
 
 auth.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
-});
-
-auth.get('/test', authRequired, (req, res) => {
-  res.status(200).json({
-    user: req.user,
-  });
 });
 
 export default auth;

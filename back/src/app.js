@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import { join } from 'path';
 import session from 'express-session';
 import passport from 'passport';
-import { ping, foundObject, auth } from './routes';
+import { ping, foundObject, auth, user } from './routes';
 
 const app = express();
 const buildPath = join(`${__dirname}/static`);
@@ -27,6 +27,7 @@ app.use(passport.authenticate('session'));
 app.use('/auth', auth);
 app.use('/api', ping);
 app.use('/api', foundObject);
+app.use('/api/user', user);
 
 app.use(express.static(buildPath));
 
