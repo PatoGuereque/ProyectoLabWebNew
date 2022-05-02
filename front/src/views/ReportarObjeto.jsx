@@ -3,11 +3,9 @@ import Box from '@mui/material/Box';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import { postObjects } from '../reducers/found-objects-reducer';
-import { useAuthContext } from '../context/auth-context';
 import Alert from '@mui/material/Alert';
 
 const ReportarObjeto = () => {
-  const { user } = useAuthContext();
   const [showAlert, editAlert] = useState(false);
   const [form, updateForm] = useState({});
 
@@ -27,7 +25,6 @@ const ReportarObjeto = () => {
   const sendForm = () => {
     postObjects({
       ...form,
-      reportingUser: user.email,
       dateFound: new Date(),
       status: 'active',
     });

@@ -1,4 +1,5 @@
 import express from 'express';
+import { body, validationResult } from 'express-validator';
 import { foundObjectRepository } from '../database';
 import { authRequired } from '../middleware/auth-required';
 
@@ -13,10 +14,35 @@ foundObject.get('/objects/list', async (_req, res) => {
   });
 });
 
-foundObject.post('/objects/create', async (req, res) => {
-  await foundObjectRepository.createFoundObject(req.body);
-  res.status(200).json(req.body);
-});
+foundObject.post(
+  '/objects/create',
+  body('campus').isString().notEmpty(),
+  body('category').isString().notEmpty(),
+  body('dateFound').isISO8601(),
+  body('imageBase64').isString().notEmpty(),
+  body('location').isString().notEmpty(),
+  body('status').isString().notEmpty(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { campus, category, dateFound, imageBase64, location, status } =
+      req.body;
+
+    await foundObjectRepository.createFoundObject({
+      campus,
+      category,
+      dateFound,
+      imageBase64,
+      location,
+      status,
+      reportingUser: req.user.email,
+    });
+    return res.status(200).json(req.body);
+  }
+);
 
 foundObject.get('/objects/get/:id', async (req, res) => {
   const objectWithId = await foundObjectRepository.getObjectWithId(
