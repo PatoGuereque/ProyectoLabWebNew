@@ -27,4 +27,14 @@ foundObject.get('/objects/get/:id', async (_req, res) => {
   });
 });
 
+foundObject.post('/objects/desactivar/:id', async (_req, res) => {
+  const deactivated = await foundObjectRepository.deactivateObject(
+    _req.params.id,
+    _req.body.matricula
+  );
+  res.status(200).json({
+    object: deactivated,
+  });
+});
+
 export default foundObject;

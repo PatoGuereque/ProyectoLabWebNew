@@ -8,6 +8,7 @@ const foundObjectSchema = new Schema({
   imageBase64: String,
   status: String,
   dateFound: Date,
+  claimedBy: String,
 });
 
 export const FoundObject = mongoose.model('FoundObject', foundObjectSchema);
