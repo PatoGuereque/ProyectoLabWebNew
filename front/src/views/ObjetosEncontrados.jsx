@@ -1,9 +1,4 @@
-import React, { useReducer, useEffect, useState } from 'react';
-import {
-  fetchObjects,
-  reducer,
-  deactivateObject,
-} from '../reducers/found-objects-reducer';
+import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -13,17 +8,14 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useAuthContext } from '../context/auth-context';
 import Alert from '@mui/material/Alert';
+import { useObjectContext } from '../context/objects-context';
 
 const ObjetosEncontrados = () => {
-  const [state, dispatch] = useReducer(reducer, { objects: undefined });
+  const { objects, deactivateObject } = useObjectContext();
   const { user } = useAuthContext();
   const [showAlert, editAlert] = useState(false);
 
-  useEffect(() => {
-    fetchObjects(dispatch);
-  }, []);
-
-  const objects = state.objects?.map((object) => (
+  const mappedObjects = objects.map((object) => (
     <Grid item xs={5} md={3} key={object._id}>
       <Card variant="outlined" sx={{ maxWidth: 345 }}>
         <CardMedia component="img" height="140" src={object.imageBase64} />
@@ -45,13 +37,10 @@ const ObjetosEncontrados = () => {
             size="small"
             onClick={() =>
               user
-                ? deactivateObject(
-                    {
-                      id: object._id,
-                      matricula: user.email,
-                    },
-                    dispatch
-                  )
+                ? deactivateObject({
+                    id: object._id,
+                    matricula: user.email,
+                  })
                 : editAlert(true)
             }
           >
@@ -71,7 +60,7 @@ const ObjetosEncontrados = () => {
           </Alert>
         ) : null}
         <Grid container spacing={2}>
-          {objects || []}
+          {mappedObjects}
         </Grid>
       </div>
     </>

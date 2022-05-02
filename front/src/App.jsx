@@ -8,6 +8,7 @@ import Faq from './views/Faq';
 import ObjetosEncontrados from './views/ObjetosEncontrados';
 import ReportarObjeto from './views/ReportarObjeto';
 import { AuthContextProvider } from './context/auth-context';
+import { ObjectContextProvider } from './context/objects-context';
 
 const darkTheme = createTheme({
   palette: {
@@ -18,17 +19,19 @@ const darkTheme = createTheme({
 const App = () => (
   <>
     <AuthContextProvider>
-      <ThemeProvider theme={darkTheme}>
-        <CssBaseline />
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/faq" element={<Faq />} />
-            <Route path="/objetos" element={<ObjetosEncontrados />} />
-            <Route path="/reportar" element={<ReportarObjeto />} />
-          </Route>
-        </Routes>
-      </ThemeProvider>
+      <ObjectContextProvider>
+        <ThemeProvider theme={darkTheme}>
+          <CssBaseline />
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/objetos" element={<ObjetosEncontrados />} />
+              <Route path="/reportar" element={<ReportarObjeto />} />
+            </Route>
+          </Routes>
+        </ThemeProvider>
+      </ObjectContextProvider>
     </AuthContextProvider>
   </>
 );

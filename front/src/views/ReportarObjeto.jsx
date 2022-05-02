@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
-import { postObjects } from '../reducers/found-objects-reducer';
 import Alert from '@mui/material/Alert';
+import { useObjectContext } from '../context/objects-context';
 
 const ReportarObjeto = () => {
-  const [showAlert, editAlert] = useState(false);
+  const { postObject, clearPostResponse, postResponse } = useObjectContext();
   const [form, updateForm] = useState({});
 
   const readFile = (event) => {
@@ -22,23 +22,33 @@ const ReportarObjeto = () => {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      clearPostResponse();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const sendForm = () => {
-    postObjects({
+    postObject({
       ...form,
       dateFound: new Date(),
       status: 'active',
     });
     updateForm({});
-    editAlert(true);
   };
 
   return (
     <>
-      {showAlert ? (
-        <Alert variant="filled" severity="success" style={{ margin: 20 }}>
-          El objeto ha sido reportado!
+      {postResponse && (
+        <Alert
+          variant="filled"
+          severity={postResponse.success ? 'success' : 'error'}
+          style={{ margin: 20 }}
+        >
+          {postResponse.success ? 'El objeto ha sido reportado!' : 'Error'}
         </Alert>
-      ) : null}
+      )}
       <Box
         component="form"
         sx={{
