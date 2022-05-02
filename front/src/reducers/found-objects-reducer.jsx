@@ -23,7 +23,6 @@ export const fetchObjects = (dispatch) => {
 };
 
 export const postObjects = async (data) => {
-  console.log(data);
   axios.post('/api/objects/create', data);
 };
 
