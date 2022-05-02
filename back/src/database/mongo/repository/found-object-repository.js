@@ -20,5 +20,6 @@ const createFoundObject = ({
   });
 
 const getFoundObjects = () => FoundObject.find();
+const getObjectWithId = (id) => FoundObject.findById(id);
 
-export { createFoundObject, getFoundObjects };
+export { createFoundObject, getFoundObjects, getObjectWithId };
