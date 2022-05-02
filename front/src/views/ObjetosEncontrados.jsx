@@ -21,50 +21,46 @@ const ObjetosEncontrados = () => {
 
   useEffect(() => {
     fetchObjects(dispatch);
-    console.log(user);
   }, []);
 
-  console.log(state.objects);
-  const objects = state.objects
-    ? state.objects.map((object) => {
-        return (
-          <Card variant="outlined" sx={{ maxWidth: 345 }} key={object.id}>
-            <CardMedia component="img" height="140" src={object.imageBase64} />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {object.category}
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div">
-                {object.campus}
-              </Typography>
-              <Typography variant="body" color="text.secondary">
-                Fecha de encuentro: {new Date(object.dateFound).toDateString()}
-                <br />
-                Ubicación: {object.location}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                onClick={() =>
-                  user
-                    ? deactivateObject(
-                        {
-                          id: object._id,
-                          matricula: user.email,
-                        },
-                        dispatch
-                      )
-                    : editAlert(true)
-                }
-              >
-                REPORTAR
-              </Button>
-            </CardActions>
-          </Card>
-        );
-      })
-    : [];
+  const objects = state.objects?.map((object) => (
+    <Grid item xs={5} md={3} key={object._id}>
+      <Card variant="outlined" sx={{ maxWidth: 345 }}>
+        <CardMedia component="img" height="140" src={object.imageBase64} />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {object.category}
+          </Typography>
+          <Typography gutterBottom variant="h6" component="div">
+            {object.campus}
+          </Typography>
+          <Typography variant="body" color="text.secondary">
+            Fecha de encuentro: {new Date(object.dateFound).toDateString()}
+            <br />
+            Ubicación: {object.location}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            size="small"
+            onClick={() =>
+              user
+                ? deactivateObject(
+                    {
+                      id: object._id,
+                      matricula: user.email,
+                    },
+                    dispatch
+                  )
+                : editAlert(true)
+            }
+          >
+            REPORTAR
+          </Button>
+        </CardActions>
+      </Card>
+    </Grid>
+  ));
 
   return (
     <>
@@ -75,13 +71,7 @@ const ObjetosEncontrados = () => {
           </Alert>
         ) : null}
         <Grid container spacing={2}>
-          {objects
-            ? objects.map((object) => (
-                <Grid item xs={5} md={3}>
-                  {object}
-                </Grid>
-              ))
-            : []}
+          {objects || []}
         </Grid>
       </div>
     </>

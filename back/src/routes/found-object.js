@@ -1,5 +1,6 @@
 import express from 'express';
 import { foundObjectRepository } from '../database';
+import { authRequired } from '../middleware/auth-required';
 
 const foundObject = express();
 
@@ -12,25 +13,24 @@ foundObject.get('/objects/list', async (_req, res) => {
   });
 });
 
-foundObject.post('/objects/create', async (_req, res) => {
-  // Posts
-  foundObjectRepository.createFoundObject(_req.body);
-  res.status(200).json(_req.body);
+foundObject.post('/objects/create', async (req, res) => {
+  await foundObjectRepository.createFoundObject(req.body);
+  res.status(200).json(req.body);
 });
 
-foundObject.get('/objects/get/:id', async (_req, res) => {
+foundObject.get('/objects/get/:id', async (req, res) => {
   const objectWithId = await foundObjectRepository.getObjectWithId(
-    _req.params.id
+    req.params.id
   );
   res.status(200).json({
     object: objectWithId,
   });
 });
 
-foundObject.post('/objects/desactivar/:id', async (_req, res) => {
+foundObject.post('/objects/desactivar/:id', authRequired, async (req, res) => {
   const deactivated = await foundObjectRepository.deactivateObject(
-    _req.params.id,
-    _req.body.matricula
+    req.params.id,
+    req.user.email
   );
   res.status(200).json({
     object: deactivated,

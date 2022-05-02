@@ -28,8 +28,6 @@ export const postObjects = async (data) => {
 };
 
 export const deactivateObject = async (data, dispatch) => {
-  await axios.post('/api/objects/desactivar/' + data.id, {
-    matricula: data.matricula,
-  });
+  await axios.post(`/api/objects/desactivar/${data.id}`);
   fetchObjects(dispatch);
 };

@@ -12,7 +12,6 @@ const ReportarObjeto = () => {
   const [form, updateForm] = useState({});
 
   const readFile = (event) => {
-    console.log(event);
     if (event.target.files && event.target.files[0]) {
       var reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]);
