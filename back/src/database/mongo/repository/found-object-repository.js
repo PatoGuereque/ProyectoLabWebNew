@@ -21,5 +21,17 @@ const createFoundObject = ({
 
 const getFoundObjects = () => FoundObject.find();
 const getObjectWithId = (id) => FoundObject.findById(id);
+const deactivateObject = async (id, matricula) => {
+  const object = await FoundObject.findByIdAndUpdate(id, {
+    claimedBy: matricula,
+    status: 'deactivated',
+  });
+  return object;
+};
 
-export { createFoundObject, getFoundObjects, getObjectWithId };
+export {
+  createFoundObject,
+  getFoundObjects,
+  getObjectWithId,
+  deactivateObject,
+};
