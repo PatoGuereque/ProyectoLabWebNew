@@ -16,6 +16,7 @@ foundObject.get('/objects/list', async (_req, res) => {
 
 foundObject.post(
   '/objects/create',
+  authRequired,
   body('campus').isString().notEmpty(),
   body('category').isString().notEmpty(),
   body('dateFound').isISO8601(),
