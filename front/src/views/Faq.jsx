@@ -1,114 +1,102 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
-import MuiAccordion from '@mui/material/Accordion';
-import MuiAccordionSummary from '@mui/material/AccordionSummary';
-import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import React from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Container } from '@mui/material';
+import { Box } from '@mui/system';
 
-const Accordion = styled((props) => (
-  <MuiAccordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-  border: `1px solid ${theme.palette.divider}`,
-  '&:not(:last-child)': {
-    borderBottom: 0,
+const questions = [
+  {
+    key: 'key1',
+    question: '¿Cómo reportar un objeto?',
+    answer: (
+      <>
+        En la pestaña de objetos, se te pedirá que llenes un formulario en el
+        cual llenarás información básica de caracteristicas del objeto, donde
+        fue encontrado, etc. Se te pide que al llenar el formulario entregues el
+        objeto a locatec.
+      </>
+    ),
   },
-  '&:before': {
-    display: 'none',
+  {
+    key: 'key2',
+    question: '¿Dónde o cómo puedo recuperar un objeto?',
+    answer: (
+      <>
+        Todos los objetos en la pestaña de Objetos Encontrados fueron entregados
+        a Locatec (Ubicado en aulas I, primer piso).
+      </>
+    ),
   },
-}));
-
-const AccordionSummary = styled((props) => (
-  <MuiAccordionSummary
-    expandIcon={<ArrowForwardIosSharpIcon sx={{ 
-      color: '#fff'
-    }} />}
-    {...props}
-  />
-))(({ theme }) => ({
-  backgroundColor:
-    theme.palette.mode === 'dark'
-      ? 'rgba(255, 255, 255, .05)'
-      : 'rgba(0, 0, 0, .03)',
-  flexDirection: 'row-reverse',
-  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-    transform: 'rotate(90deg)',
+  {
+    key: 'key3',
+    question: '¿Qué pasa si no encuentro mi Objeto en OBJETOS PERDIDOS?',
+    answer: (
+      <>
+        No todos los objetos que se encuentran en locatec estan en la pagina por
+        lo que te recomendamos darte una vuelta a locatec (Ubicado en aulas I,
+        primer piso).
+      </>
+    ),
   },
-  '& .MuiAccordionSummary-content': {
-    marginLeft: theme.spacing(1),
-  },
-}));
+];
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
-  borderTop: '1px solid rgba(0, 0, 0, .125)',
-}));
+const FAQ = () => {
+  const [expanded, setExpanded] = React.useState(false);
 
-export default function CustomizedAccordions() {
-  const [expanded, setExpanded] = React.useState('panel1');
-
-  const handleChange = (panel) => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
+  const handleChange = (panel) => (_event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
 
   return (
-    <div>
-      <Container fixed >
-      <Typography component="h1" variant="h4" align="center" color = "#0474A9">FAQ</Typography>
-      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" sx={{ 
-        background: '#0474A9',
-        color: '#fff'
-      }}>
-          <Typography>¿Cómo reportar un objeto?</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ 
-        background: '#11A1B7',
-        color: '#fff'
-      }}>
-
-          <Typography>
-            En la pestaña de objetos, se te pedirá que llenes un formulario.
+    <>
+      <Box
+        sx={{
+          pt: 8,
+          pb: 4,
+        }}
+      >
+        <Container maxWidth="sm">
+          <Typography
+            component="h1"
+            variant="h2"
+            align="center"
+            color="text.primary"
+            gutterBottom
+          >
+            Preguntas Frecuentes (FAQ)
           </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header" sx={{ 
-        background: '#0474A9',
-        color: '#fff'
-      }}>
-          <Typography>¿Dónde o cómo puedo recuperar un objeto?</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ 
-        background: '#11A1B7',
-        color: '#fff'
-      }}>
-          <Typography>
-            Todos los objetos en la pestaña de Objetos Encontrados, fueron entregados a Locatec.
+          <Typography
+            variant="h5"
+            align="center"
+            color="text.secondary"
+            paragraph
+          >
+            Aquí podrás encontrar la sección con las preguntas más frecuentes
+            que nos han hecho
           </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header" sx={{ 
-        background: '#0474A9',
-        color: '#fff'
-      }}>
-          <Typography>¿Qué pasa si no encuentro mi objeto en Objetos Pedidos?</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ 
-          background: '#11A1B7',
-          color: '#fff'
-        }}>
-          <Typography>
-            Te recomendamos darte una vuelta a locatec de tu Campus.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+        </Container>
+      </Box>
+      <Container sx={{ py: 8 }} maxWidth="md">
+        {questions.map((question) => (
+          <Accordion
+            expanded={expanded === question.key}
+            onChange={handleChange(question.key)}
+            key={question.key}
+          >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>{question.question}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{question.answer}</Typography>
+            </AccordionDetails>
+          </Accordion>
+        ))}
       </Container>
-      <Typography component="h6" variant="h6" align="center" color = "#000" >
-        Teléfono: 81 8358 2000
-      </Typography>
-    </div>
+    </>
   );
-}
+};
+
+export default FAQ;

@@ -62,14 +62,17 @@ const PageAppBar = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
+          <Box
             component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              mr: 2,
+            }}
           >
-            Lost and Found
-          </Typography>
+            <Link to={'/'}>
+              <img src="logolocatec.png" alt="logo" height="45px" />
+            </Link>
+          </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -114,14 +117,18 @@ const PageAppBar = () => {
               )}
             </Menu>
           </Box>
-          <Typography
-            variant="h6"
-            noWrap
+
+          <Box
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'flex', md: 'none' },
+            }}
           >
-            Lost and Found
-          </Typography>
+            <Link to={'/'}>
+              <img src="logolocatec.png" alt="logo" height="45px" />
+            </Link>
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) =>
               page?.name ? (

@@ -13,6 +13,12 @@ import { ObjectContextProvider } from './context/objects-context';
 const darkTheme = createTheme({
   palette: {
     mode: 'light',
+    primary: {
+      main: '#0474A9',
+    },
+  },
+  typography: {
+    fontFamily: ['Poppins', 'sans-serif'].join(','),
   },
 });
 
