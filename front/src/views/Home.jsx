@@ -94,7 +94,7 @@ const Home = () => {
             item
             xs={12}
             sx={{
-              height: '50vh',
+              minHeight: '50vh',
             }}
           >
             <Typography
@@ -116,7 +116,7 @@ const Home = () => {
                 textAlign: 'center',
               }}
             >
-              <Grid item xs={6}>
+              <Grid item md={6} xs={12}>
                 <LostItemsIcon sx={{ fontSize: 120 }} color="primary" />
                 <Typography
                   variant="h6"
@@ -140,7 +140,7 @@ const Home = () => {
                   catálogo de objetos perdidos
                 </Typography>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item md={6} xs={12}>
                 <FoundItemIcon sx={{ fontSize: 120 }} color="primary" />
                 <Typography
                   variant="h6"
@@ -169,7 +169,7 @@ const Home = () => {
             item
             xs={12}
             sx={{
-              height: '50vh',
+              minHeight: '50vh',
             }}
           >
             <Typography
