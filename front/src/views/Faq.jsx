@@ -1,102 +1,71 @@
 import React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Container } from '@mui/material';
-import { Box } from '@mui/system';
+import { Container, Box } from '@mui/material';
+import FAQQuestions from '../components/FAQQuestions';
 
-const questions = [
-  {
-    key: 'key1',
-    question: '¿Cómo reportar un objeto?',
-    answer: (
-      <>
-        En la pestaña de objetos, se te pedirá que llenes un formulario en el
-        cual llenarás información básica de caracteristicas del objeto, donde
-        fue encontrado, etc. Se te pide que al llenar el formulario entregues el
-        objeto a locatec.
-      </>
-    ),
-  },
-  {
-    key: 'key2',
-    question: '¿Dónde o cómo puedo recuperar un objeto?',
-    answer: (
-      <>
-        Todos los objetos en la pestaña de Objetos Encontrados fueron entregados
-        a Locatec (Ubicado en aulas I, primer piso).
-      </>
-    ),
-  },
-  {
-    key: 'key3',
-    question: '¿Qué pasa si no encuentro mi Objeto en OBJETOS PERDIDOS?',
-    answer: (
-      <>
-        No todos los objetos que se encuentran en locatec estan en la pagina por
-        lo que te recomendamos darte una vuelta a locatec (Ubicado en aulas I,
-        primer piso).
-      </>
-    ),
-  },
-];
-
-const FAQ = () => {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleChange = (panel) => (_event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
-  return (
-    <>
-      <Box
-        sx={{
-          pt: 8,
-          pb: 4,
-        }}
-      >
-        <Container maxWidth="sm">
-          <Typography
-            component="h1"
-            variant="h2"
-            align="center"
-            color="text.primary"
-            gutterBottom
-          >
-            Preguntas Frecuentes (FAQ)
-          </Typography>
-          <Typography
-            variant="h5"
-            align="center"
-            color="text.secondary"
-            paragraph
-          >
-            Aquí podrás encontrar la sección con las preguntas más frecuentes
-            que nos han hecho
-          </Typography>
-        </Container>
-      </Box>
-      <Container sx={{ py: 8 }} maxWidth="md">
-        {questions.map((question) => (
-          <Accordion
-            expanded={expanded === question.key}
-            onChange={handleChange(question.key)}
-            key={question.key}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>{question.question}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>{question.answer}</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
+const FAQ = () => (
+  <>
+    <Box
+      sx={{
+        pt: 8,
+      }}
+    >
+      <Container maxWidth="sm">
+        <Typography
+          component="h1"
+          variant="h2"
+          align="center"
+          color="text.primary"
+          gutterBottom
+        >
+          Preguntas Frecuentes (FAQ)
+        </Typography>
+        <Typography
+          variant="h5"
+          align="center"
+          color="text.secondary"
+          paragraph
+        >
+          Aquí podrás encontrar la sección con las preguntas más frecuentes que
+          nos han hecho
+        </Typography>
       </Container>
-    </>
-  );
-};
+    </Box>
+    <FAQQuestions />
+
+    <Box>
+      <Container maxWidth="sm">
+        <Typography
+          component="h3"
+          variant="h5"
+          align="center"
+          color="text.primary"
+          sx={{
+            pb: 2,
+          }}
+        >
+          ¿Todavía tienes preguntas?
+        </Typography>
+        <Typography
+          variant="body1"
+          align="center"
+          color="text.secondary"
+          paragraph
+        >
+          LOCATEC de lunes a viernes de 8:00 a 18:00 horas. Teléfono: 303 2181
+        </Typography>
+
+        <Typography
+          variant="body1"
+          align="center"
+          color="text.secondary"
+          paragraph
+        >
+          Centro de Control de lunes a viernes 24 horas. Teléfono: 303 2148
+        </Typography>
+      </Container>
+    </Box>
+  </>
+);
 
 export default FAQ;
