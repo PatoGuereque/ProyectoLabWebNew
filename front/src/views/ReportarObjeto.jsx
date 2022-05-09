@@ -20,12 +20,31 @@ import {
 } from '@mui/material';
 
 const campus = [
-  'MTY',
-  'CDMX',
+  'Aguascalientes',
+  'Chiapas',
+  'Chihuahua',
+  'Ciudad de México',
+  'Ciudad Juárez',
+  'Ciudad Obregón',
+  'Cuernavaca',
+  'Estado de México',
   'Guadalajara',
+  'Hidalgo',
+  'Irapuato',
+  'Laguna',
+  'León',
+  'Monterrey',
+  'Morelia',
   'Puebla',
-  'Queretaro',
+  'Querétaro',
   'Saltillo',
+  'San Luis Potosí',
+  'Santa Fe',
+  'Sinaloa',
+  'Sonora Norte',
+  'Tampico',
+  'Toluca',
+  'Zacatecas',
 ];
 
 const ubicaciones = [
@@ -95,6 +114,14 @@ const schemaResolver = (data) => {
       ),
     };
   }
+};
+
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: 224,
+    },
+  },
 };
 
 const ReportarObjeto = () => {
@@ -192,6 +219,7 @@ const ReportarObjeto = () => {
                         id="campus"
                         label="Campus"
                         variant="outlined"
+                        MenuProps={MenuProps}
                       >
                         {campus.map((loc) => (
                           <MenuItem key={loc} value={loc}>
@@ -224,6 +252,7 @@ const ReportarObjeto = () => {
                         label="Ubicación"
                         fullWidth
                         variant="outlined"
+                        MenuProps={MenuProps}
                       >
                         {ubicaciones.map((loc) => (
                           <MenuItem key={loc} value={loc}>
@@ -258,6 +287,7 @@ const ReportarObjeto = () => {
                         label="Categoría"
                         fullWidth
                         variant="outlined"
+                        MenuProps={MenuProps}
                       >
                         {categorias.map((cat) => (
                           <MenuItem key={cat} value={cat}>
