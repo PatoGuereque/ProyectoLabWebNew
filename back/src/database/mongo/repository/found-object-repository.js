@@ -8,6 +8,7 @@ const createFoundObject = ({
   imageBase64,
   status,
   dateFound,
+  comments,
 }) =>
   FoundObject.create({
     campus,
@@ -17,6 +18,7 @@ const createFoundObject = ({
     imageBase64,
     status,
     dateFound,
+    comments,
   });
 
 const getFoundObjects = () => FoundObject.find();

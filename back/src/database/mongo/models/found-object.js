@@ -9,6 +9,7 @@ const foundObjectSchema = new Schema({
   status: String,
   dateFound: Date,
   claimedBy: String,
+  commments: String,
 });
 
 export const FoundObject = mongoose.model('FoundObject', foundObjectSchema);
