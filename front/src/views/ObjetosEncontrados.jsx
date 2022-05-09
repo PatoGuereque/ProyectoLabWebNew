@@ -27,21 +27,23 @@ const ObjetosEncontrados = () => {
             {object.campus}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button
-            size="small"
-            onClick={() =>
-              user
-                ? deactivateObject({
-                    id: object._id,
-                    matricula: user.email,
-                  })
-                : editAlert(true)
-            }
-          >
-            RECLAMAR
-          </Button>
-        </CardActions>
+        {user ? (
+          <CardActions>
+            <Button
+              size="small"
+              onClick={() =>
+                user
+                  ? deactivateObject({
+                      id: object._id,
+                      matricula: user.email,
+                    })
+                  : editAlert(true)
+              }
+            >
+              RECLAMAR
+            </Button>
+          </CardActions>
+        ) : null}
       </Card>
     </Grid>
   ));

@@ -103,6 +103,14 @@ const ReportarObjeto = () => {
             <Typography variant="h6" gutterBottom>
               Detalles
             </Typography>
+            <Typography
+              component="h7"
+              variant="h4"
+              align="center"
+              style={{ fontSize: 15 }}
+            >
+              * Campos Obligatorios
+            </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <TextField
@@ -147,6 +155,14 @@ const ReportarObjeto = () => {
                 />
               </Grid>
               <Grid item xs={12} style={{ textAlign: 'left' }}>
+                <Typography
+                  component="h6"
+                  variant="h4"
+                  align="left"
+                  style={{ fontSize: 15 }}
+                >
+                  Solo imagenes de máximo 16MB
+                </Typography>
                 <input
                   placeholder="Imagen"
                   type="file"
