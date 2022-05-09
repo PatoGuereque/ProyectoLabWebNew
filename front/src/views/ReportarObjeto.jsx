@@ -154,6 +154,22 @@ const ReportarObjeto = () => {
                 </Button>
               </Grid>
               <Grid item xs={12}>
+                <TextField
+                  required
+                  id="comments"
+                  name="comments"
+                  label="Comentarios"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  variant="standard"
+                  value={form.comments}
+                  onChange={(e) =>
+                    updateForm({ ...form, comments: e.target.value })
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
                 <Button
                   variant="contained"
                   color="success"

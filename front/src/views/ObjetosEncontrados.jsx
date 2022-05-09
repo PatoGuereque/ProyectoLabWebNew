@@ -26,11 +26,6 @@ const ObjetosEncontrados = () => {
           <Typography gutterBottom variant="h6" component="div">
             {object.campus}
           </Typography>
-          <Typography variant="body" color="text.secondary">
-            Fecha de encuentro: {new Date(object.dateFound).toDateString()}
-            <br />
-            Ubicación: {object.location}
-          </Typography>
         </CardContent>
         <CardActions>
           <Button
@@ -44,7 +39,7 @@ const ObjetosEncontrados = () => {
                 : editAlert(true)
             }
           >
-            REPORTAR
+            RECLAMAR
           </Button>
         </CardActions>
       </Card>
