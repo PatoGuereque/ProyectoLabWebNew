@@ -11,7 +11,7 @@ const buildPath = join(`${__dirname}/static`);
 
 app.use(helmet());
 app.use(morgan('common'));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 app.use(
   session({

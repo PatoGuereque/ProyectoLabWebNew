@@ -81,8 +81,8 @@ setLocale({
 const userSchema = object({
   imageBase64: mixed()
     .required()
-    .test('fileSize', 'Debes de subir una foto', (value) => {
-      return value && value[0].size <= 1_000_000;
+    .test('fileSize', 'Foto demasiado grande (Max 10mb)', (value) => {
+      return value && value[0].size <= 10_485_760;
     }),
   campus: string().required(),
   category: string().required(),
