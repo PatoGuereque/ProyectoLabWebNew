@@ -6,10 +6,13 @@ import FAQQuestions from '../components/FAQQuestions';
 import Copyright from '../components/Copyright';
 import FoundItemIcon from '../icons/FoundItemsIcon';
 import LostItemsIcon from '../icons/LostItemsIcon';
+import { useAuthContext } from '../context/auth-context';
 
 const images = ['book', 'card', 'key', 'mobile', 'name', 'screen'];
 
 const Home = () => {
+  const { user, login } = useAuthContext();
+
   return (
     <>
       <Container maxWidth="lg">
@@ -55,7 +58,19 @@ const Home = () => {
                 mt: 6,
               }}
             >
-              <Button variant="contained">Reportar Objeto</Button>
+              {user === undefined ? (
+                <Button variant="contained" onClick={login}>
+                  Iniciar Sesión
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  component={RouterLink}
+                  to="/reportar"
+                >
+                  Reportar Objeto
+                </Button>
+              )}
             </Box>
           </Grid>
 
