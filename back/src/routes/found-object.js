@@ -28,6 +28,10 @@ foundObject.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
+    if (!req.user) {
+      return res.status(400).json({ error: 'User is not logged in' });
+    }
+
     const { campus, category, dateFound, imageBase64, location, status } =
       req.body;
 
