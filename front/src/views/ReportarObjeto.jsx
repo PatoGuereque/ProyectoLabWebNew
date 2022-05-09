@@ -11,6 +11,45 @@ import { useForm, Controller } from 'react-hook-form';
 import { object, string, mixed, setLocale } from 'yup';
 import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
+
+const campus = [
+  'MTY',
+  'CDMX',
+  'Guadalajara',
+  'Puebla',
+  'Queretaro',
+  'Saltillo',
+];
+
+const ubicaciones = [
+  'Aulas 1',
+  'Aulas 2',
+  'Aulas 3',
+  'Aulas 4',
+  'Aulas 6',
+  'Aulas 7',
+  'Biblio',
+  'Cenrtrales',
+  'Jubileo',
+  'Rectoría',
+];
+
+const categorias = [
+  'Audífonos',
+  'Cartera',
+  'Computadora',
+  'Llaves',
+  'Mochila',
+  'Telefono',
+  'Termo',
+];
 
 setLocale({
   mixed: {
@@ -82,20 +121,25 @@ const ReportarObjeto = () => {
   const imageBase64 = watch('imageBase64');
 
   useEffect(() => {
-    if (postResponse?.success && imageBase64?.length !== 0) {
+    return () => {
+      clearPostResponse();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (postResponse) {
+      if (postResponse.success) {
+        reset();
+      }
       setLoading(false);
-      reset();
-      return;
     }
 
-    return () => {
-      if (postResponse !== undefined) {
-        clearPostResponse();
-      }
-    };
-  }, [clearPostResponse, postResponse, reset, imageBase64]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postResponse]);
 
   const onSubmit = ({ imageBase64, ...rest }) => {
+    clearPostResponse();
     const reader = new FileReader();
     setLoading(true);
     reader.onload = () => {
@@ -140,15 +184,25 @@ const ReportarObjeto = () => {
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
-                    <TextField
-                      {...field}
-                      id="campus"
-                      label="Campus"
-                      fullWidth
-                      variant="standard"
-                      error={errors.campus !== undefined}
-                      helperText={errors.campus?.message}
-                    />
+                    <FormControl fullWidth error={errors.campus !== undefined}>
+                      <InputLabel id="campus-label">Campus</InputLabel>
+                      <Select
+                        {...field}
+                        labelId="campus-label"
+                        id="campus"
+                        label="Campus"
+                        variant="outlined"
+                      >
+                        {campus.map((loc) => (
+                          <MenuItem key={loc} value={loc}>
+                            {loc}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors.campus && (
+                        <FormHelperText>{errors.campus.message}</FormHelperText>
+                      )}
+                    </FormControl>
                   )}
                 />
               </Grid>
@@ -158,15 +212,31 @@ const ReportarObjeto = () => {
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
-                    <TextField
-                      {...field}
-                      id="location"
-                      label="Ubicación"
+                    <FormControl
                       fullWidth
-                      variant="standard"
                       error={errors.location !== undefined}
-                      helperText={errors.location?.message}
-                    />
+                    >
+                      <InputLabel id="location-label">Ubicación</InputLabel>
+                      <Select
+                        {...field}
+                        labelId="location-label"
+                        id="location"
+                        label="Ubicación"
+                        fullWidth
+                        variant="outlined"
+                      >
+                        {ubicaciones.map((loc) => (
+                          <MenuItem key={loc} value={loc}>
+                            {loc}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors.location && (
+                        <FormHelperText>
+                          {errors.location.message}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                   )}
                 />
               </Grid>
@@ -176,15 +246,31 @@ const ReportarObjeto = () => {
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
-                    <TextField
-                      {...field}
-                      id="category"
-                      label="Categoría"
+                    <FormControl
                       fullWidth
-                      variant="standard"
                       error={errors.category !== undefined}
-                      helperText={errors.category?.message}
-                    />
+                    >
+                      <InputLabel id="category-label">Categoría</InputLabel>
+                      <Select
+                        {...field}
+                        labelId="category-label"
+                        id="category"
+                        label="Categoría"
+                        fullWidth
+                        variant="outlined"
+                      >
+                        {categorias.map((cat) => (
+                          <MenuItem key={cat} value={cat}>
+                            {cat}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {errors.category && (
+                        <FormHelperText>
+                          {errors.category.message}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                   )}
                 />
               </Grid>
@@ -225,7 +311,7 @@ const ReportarObjeto = () => {
                       fullWidth
                       multiline
                       rows={4}
-                      variant="standard"
+                      variant="outlined"
                       error={errors.comments !== undefined}
                       helperText={errors.comments?.message}
                     />
