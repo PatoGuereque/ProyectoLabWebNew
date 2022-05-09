@@ -1,96 +1,114 @@
-import React, { useState } from 'react';
-import { Data } from '../components/DataFAQ';
-import styled from 'styled-components';
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import RemoveIcon from '@mui/icons-material/Remove';
+import Container from '@mui/material/Container';
 
-const AccordionSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  height: 100vh;
-  background: #fff;
-`;
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
+}));
 
-const Container = styled.div`
-  position: absolute;
-  top: 10%;
-  box-shadow: 2px 10px 35px 1px rgba(153, 153, 153, 0.3);
-`;
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ 
+      color: '#fff'
+    }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .05)'
+      : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
 
-const Wrap = styled.div`
-  background: #0474A9;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  text-align: center;
-  cursor: pointer;
-  h1 {
-    padding: 2rem;
-    font-size: 1rem;
-  }
-  span {
-    margin-right: 1.5rem;
-  }
-`;
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
 
-const Dropdown = styled.div`
-  background: #11A1B7;
-  color: #fff;
-  width: 100%;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid #00ffb9;
-  border-top: 1px solid #00ffb9;
-  p {
-    font-size: 1rem;
-  }
-  margin-right: 1rem; 
-`;
+export default function CustomizedAccordions() {
+  const [expanded, setExpanded] = React.useState('panel1');
 
-const Accordion = () => {
-  const [clicked, setClicked] = useState(false);
-  const toggle = index => {
-    if (clicked === index) {
-      //if clicked question is already active, then close it
-      return setClicked(null);
-    }
-
-    setClicked(index);
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
   };
-  
-  return (
-      <AccordionSection>
-        <Container>
-          <Typography component="h1" variant="h4" align="center" color = "#0474A9">
-            FAQ
-          </Typography>
-          {Data.map((item, index) => {
-            return (
-              <>
-                <Wrap onClick={() => toggle(index)} key={index}>
-                  <h1>{item.question}</h1>
-                  <span>{clicked === index ? <RemoveIcon /> : <AddBoxIcon />}</span>
-                </Wrap>
-                {clicked === index ? (
-                  <Dropdown>
-                    <p>{item.answer}</p>
-                  </Dropdown>
-                ) : null}
-              </>
-            );
-          })}
-        </Container>
-      </AccordionSection>
-  );
-};
 
-export default Accordion;
+  return (
+    <div>
+      <Container fixed >
+      <Typography component="h1" variant="h4" align="center" color = "#0474A9">FAQ</Typography>
+      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" sx={{ 
+        background: '#0474A9',
+        color: '#fff'
+      }}>
+          <Typography>¿Cómo reportar un objeto?</Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ 
+        background: '#11A1B7',
+        color: '#fff'
+      }}>
+
+          <Typography>
+            En la pestaña de objetos, se te pedirá que llenes un formulario.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header" sx={{ 
+        background: '#0474A9',
+        color: '#fff'
+      }}>
+          <Typography>¿Dónde o cómo puedo recuperar un objeto?</Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ 
+        background: '#11A1B7',
+        color: '#fff'
+      }}>
+          <Typography>
+            Todos los objetos en la pestaña de Objetos Encontrados, fueron entregados a Locatec.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header" sx={{ 
+        background: '#0474A9',
+        color: '#fff'
+      }}>
+          <Typography>¿Qué pasa si no encuentro mi objeto en Objetos Pedidos?</Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ 
+          background: '#11A1B7',
+          color: '#fff'
+        }}>
+          <Typography>
+            Te recomendamos darte una vuelta a locatec de tu Campus.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      </Container>
+      <Typography component="h6" variant="h6" align="center" color = "#000" >
+        Teléfono: 81 8358 2000
+      </Typography>
+    </div>
+  );
+}
