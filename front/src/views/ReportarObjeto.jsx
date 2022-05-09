@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useObjectContext } from '../context/objects-context';
 import Alert from '@mui/material/Alert';
@@ -7,76 +7,110 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import { useForm, Controller } from 'react-hook-form';
+import { object, string, mixed, setLocale } from 'yup';
+import { useState } from 'react';
+import { LoadingButton } from '@mui/lab';
+
+setLocale({
+  mixed: {
+    default: 'No es válido',
+    // eslint-disable-next-line no-template-curly-in-string
+    required: '${path} es un campo requerido',
+  },
+});
+
+const userSchema = object({
+  imageBase64: mixed()
+    .required()
+    .test('fileSize', 'Debes de subir una foto', (value) => {
+      return value && value[0].size <= 1_000_000;
+    }),
+  campus: string().required(),
+  category: string().required(),
+  location: string().required(),
+  comments: string().required(),
+});
+
+const schemaResolver = (data) => {
+  try {
+    const values = userSchema.validateSync(data, {
+      abortEarly: false,
+    });
+    return {
+      values,
+      errors: {},
+    };
+  } catch (errors) {
+    return {
+      values: {},
+      errors: errors.inner.reduce(
+        (allErrors, currentError) => ({
+          ...allErrors,
+          [currentError.path]: {
+            type: currentError.type ?? 'validation',
+            message: currentError.message,
+          },
+        }),
+        {}
+      ),
+    };
+  }
+};
 
 const ReportarObjeto = () => {
   const { postObject, clearPostResponse, postResponse } = useObjectContext();
-  const [showErrorAlert, editErrorAlert] = useState(false);
-  const [form, updateForm] = useState({});
-  const hiddenFileInput = useRef(null);
-  const [fileName, setFileName] = useState('');
-  const [errorLabel, setErrorLabel] = useState('Error');
+  const [loading, setLoading] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    register,
+    watch,
+    reset,
+  } = useForm({
+    defaultValues: {
+      campus: '',
+      location: '',
+      category: '',
+      imageBase64: '',
+      comments: '',
+    },
+    resolver: schemaResolver,
+  });
 
-  const readFile = (event) => {
-    console.log(event.target);
-    if (event.target.files && event.target.files[0]) {
-      setFileName(event.target.files[0].name);
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = function () {
-        updateForm({
-          ...form,
-          imageBase64: reader.result,
-        });
-      };
-    }
-  };
+  const imageBase64 = watch('imageBase64');
 
   useEffect(() => {
-    return () => {
-      clearPostResponse();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const sendForm = async () => {
-    //Error Handling
-    if (
-      !form.campus ||
-      !form.location ||
-      !form.category ||
-      !form.imageBase64 ||
-      form.campus.trim() === '' ||
-      form.location.trim() === '' ||
-      form.category.trim() === '' ||
-      form.imageBase64.trim() === ''
-    ) {
-      setErrorLabel('Debes de llenar todos los campos.');
-      editErrorAlert(true);
-      const timer = setTimeout(() => {
-        editErrorAlert(false);
-      }, 3000);
-      return () => clearTimeout(timer);
+    if (postResponse?.success && imageBase64?.length !== 0) {
+      setLoading(false);
+      reset();
+      return;
     }
-    try {
-      await postObject({
-        ...form,
+
+    return () => {
+      if (postResponse !== undefined) {
+        clearPostResponse();
+      }
+    };
+  }, [clearPostResponse, postResponse, reset, imageBase64]);
+
+  const onSubmit = ({ imageBase64, ...rest }) => {
+    const reader = new FileReader();
+    setLoading(true);
+    reader.onload = () => {
+      postObject({
+        ...rest,
+        imageBase64: reader.result,
         dateFound: new Date(),
         status: 'active',
       });
-    } catch (error) {
-      return new Error(error);
-    }
-    updateForm({
-      campus: '',
-      category: '',
-      location: '',
-      imageBase64: '',
-      comments: '',
-    });
+    };
+    reader.readAsDataURL(imageBase64[0]);
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       {postResponse && (
         <Alert
           variant="filled"
@@ -86,11 +120,7 @@ const ReportarObjeto = () => {
           {postResponse.success ? 'El objeto ha sido reportado!' : 'Error'}
         </Alert>
       )}
-      {showErrorAlert && (
-        <Alert variant="filled" severity="error" style={{ margin: 20 }}>
-          {errorLabel}
-        </Alert>
-      )}
+
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
@@ -103,113 +133,120 @@ const ReportarObjeto = () => {
             <Typography variant="h6" gutterBottom>
               Detalles
             </Typography>
-            <Typography
-              component="h7"
-              variant="h4"
-              align="center"
-              style={{ fontSize: 15 }}
-            >
-              * Campos Obligatorios
-            </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  id="campus"
-                  label="Campus"
-                  fullWidth
+                <Controller
                   name="campus"
-                  variant="standard"
-                  value={form.campus}
-                  onChange={(e) =>
-                    updateForm({ ...form, campus: e.target.value })
-                  }
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="campus"
+                      label="Campus"
+                      fullWidth
+                      variant="standard"
+                      error={errors.campus !== undefined}
+                      helperText={errors.campus?.message}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  id="location"
-                  label="Ubicación"
-                  fullWidth
+                <Controller
                   name="location"
-                  variant="standard"
-                  value={form.location}
-                  onChange={(e) =>
-                    updateForm({ ...form, location: e.target.value })
-                  }
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="location"
+                      label="Ubicación"
+                      fullWidth
+                      variant="standard"
+                      error={errors.location !== undefined}
+                      helperText={errors.location?.message}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  id="category"
+                <Controller
                   name="category"
-                  label="Categoría"
-                  fullWidth
-                  variant="standard"
-                  value={form.category}
-                  onChange={(e) =>
-                    updateForm({ ...form, category: e.target.value })
-                  }
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="category"
+                      label="Categoría"
+                      fullWidth
+                      variant="standard"
+                      error={errors.category !== undefined}
+                      helperText={errors.category?.message}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} style={{ textAlign: 'left' }}>
-                <Typography
-                  component="h6"
-                  variant="h4"
-                  align="left"
-                  style={{ fontSize: 15 }}
-                >
-                  Solo imagenes de máximo 16MB
-                </Typography>
-                <input
-                  placeholder="Imagen"
-                  type="file"
-                  id="imageBase64"
-                  name="imageBase64"
-                  ref={hiddenFileInput}
-                  onChange={(e) => readFile(e)}
-                  style={{ display: 'none' }}
-                />
-                <p>{fileName}</p>
+                <p>{imageBase64 && imageBase64[0]?.name}</p>
                 <Button
                   variant="outlined"
-                  onClick={() => hiddenFileInput.current.click()}
+                  component="label"
+                  color={errors.imageBase64 !== undefined ? 'error' : 'primary'}
                 >
                   SUBIR IMAGEN
+                  <input
+                    {...register('imageBase64')}
+                    placeholder="Imagen"
+                    type="file"
+                    name="imageBase64"
+                    accept="image/*"
+                    hidden
+                  />
                 </Button>
+                {errors.imageBase64 && (
+                  <Typography component="p" variant="caption" color="error">
+                    {errors.imageBase64.message}
+                  </Typography>
+                )}
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  id="comments"
+                <Controller
                   name="comments"
-                  label="Comentarios"
-                  fullWidth
-                  multiline
-                  rows={4}
-                  variant="standard"
-                  value={form.comments}
-                  onChange={(e) =>
-                    updateForm({ ...form, comments: e.target.value })
-                  }
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      id="comments"
+                      name="comments"
+                      label="Comentarios"
+                      fullWidth
+                      multiline
+                      rows={4}
+                      variant="standard"
+                      error={errors.comments !== undefined}
+                      helperText={errors.comments?.message}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button
+                <LoadingButton
+                  loading={loading}
                   variant="contained"
                   color="success"
-                  onClick={() => sendForm()}
+                  type="submit"
                 >
                   REPORTAR
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </React.Fragment>
         </Paper>
       </Container>
-    </>
+    </form>
   );
 };
 

@@ -36,7 +36,7 @@ export const useObjectContext = () => {
     fetchObjects: () => fetchObjects(dispatch),
     postObject: (data) => postObject(data, dispatch),
     deactivateObject: (data) => deactivateObject(data, dispatch),
-    clearPostResponse: (data) => clearPostObject(dispatch),
+    clearPostResponse: () => clearPostObject(dispatch),
 
     objects: state.objects,
     postResponse: state.postResponse,
