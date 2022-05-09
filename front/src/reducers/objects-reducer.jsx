@@ -32,6 +32,7 @@ export const postObject = async (data, dispatch) => {
   axios
     .post('/api/objects/create', data)
     .then(() => {
+      fetchObjects(dispatch);
       dispatch(
         postObjectResponse({
           success: true,
