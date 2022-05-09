@@ -38,7 +38,7 @@ const ReportarObjeto = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const sendForm = () => {
+  const sendForm = async () => {
     //Error Handling
     if (
       !form.campus ||
@@ -57,12 +57,22 @@ const ReportarObjeto = () => {
       }, 3000);
       return () => clearTimeout(timer);
     }
-    postObject({
-      ...form,
-      dateFound: new Date(),
-      status: 'active',
+    try {
+      await postObject({
+        ...form,
+        dateFound: new Date(),
+        status: 'active',
+      });
+    } catch (error) {
+      return new Error(error);
+    }
+    updateForm({
+      campus: '',
+      category: '',
+      location: '',
+      imageBase64: '',
+      comments: '',
     });
-    updateForm({});
   };
 
   return (
@@ -140,6 +150,7 @@ const ReportarObjeto = () => {
                 <input
                   placeholder="Imagen"
                   type="file"
+                  id="imageBase64"
                   name="imageBase64"
                   ref={hiddenFileInput}
                   onChange={(e) => readFile(e)}

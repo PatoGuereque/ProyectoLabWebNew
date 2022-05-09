@@ -16,29 +16,33 @@ import { useAuthContext } from '../context/auth-context';
 import Logout from '@mui/icons-material/Logout';
 import { Divider, ListItemIcon } from '@mui/material';
 
-const pages = [
-  {
-    name: 'Inicio',
-    route: '/',
-  },
-  {
-    name: 'Objetos Perdidos',
-    route: '/objetos',
-  },
-  {
-    name: 'Reportar Objetos',
-    route: '/reportar',
-  },
-  {
-    name: 'FAQ',
-    route: '/faq',
-  },
-];
-
 const PageAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user, login, logout } = useAuthContext();
+
+  const pages = [
+    {
+      name: 'Inicio',
+      route: '/',
+    },
+    user
+      ? {
+          name: 'Objetos Perdidos',
+          route: '/objetos',
+        }
+      : {},
+    user
+      ? {
+          name: 'Reportar Objetos',
+          route: '/reportar',
+        }
+      : {},
+    {
+      name: 'FAQ',
+      route: '/faq',
+    },
+  ];
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -96,16 +100,18 @@ const PageAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map(({ name, route }) => (
-                <MenuItem
-                  key={name}
-                  onClick={handleCloseNavMenu}
-                  to={route}
-                  component={Link}
-                >
-                  <Typography textAlign="center">{name}</Typography>
-                </MenuItem>
-              ))}
+              {pages.map((page) =>
+                page?.name ? (
+                  <MenuItem
+                    key={page.name}
+                    onClick={handleCloseNavMenu}
+                    to={page.route}
+                    component={Link}
+                  >
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </MenuItem>
+                ) : null
+              )}
             </Menu>
           </Box>
           <Typography
@@ -117,16 +123,18 @@ const PageAppBar = () => {
             Lost and Found
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map(({ name, route }) => (
-              <Button
-                key={name}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                to={route}
-                component={Link}
-              >
-                {name}
-              </Button>
-            ))}
+            {pages.map((page) =>
+              page?.name ? (
+                <Button
+                  key={page.name}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  to={page.route}
+                  component={Link}
+                >
+                  {page.name}
+                </Button>
+              ) : null
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
