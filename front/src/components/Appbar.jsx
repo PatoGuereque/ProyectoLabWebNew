@@ -11,10 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link } from 'react-router-dom';
-import { useAuthContext } from '../context/auth-context';
 import Logout from '@mui/icons-material/Logout';
 import { Divider, ListItemIcon } from '@mui/material';
+import NextLink from 'next/link';
+import { useAuthContext } from '../context/auth-context';
 
 const PageAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -69,9 +69,9 @@ const PageAppBar = () => {
               mr: 2,
             }}
           >
-            <Link to={'/'}>
-              <img src="logolocatec.png" alt="logo" height="45px" />
-            </Link>
+            <NextLink href="/">
+              <img src="/logolocatec.png" alt="logo" height="45px" />
+            </NextLink>
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -105,14 +105,11 @@ const PageAppBar = () => {
             >
               {pages.map((page) =>
                 page?.name ? (
-                  <MenuItem
-                    key={page.name}
-                    onClick={handleCloseNavMenu}
-                    to={page.route}
-                    component={Link}
-                  >
-                    <Typography textAlign="center">{page.name}</Typography>
-                  </MenuItem>
+                  <NextLink key={page.name} href={page.route} passHref>
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center">{page.name}</Typography>
+                    </MenuItem>
+                  </NextLink>
                 ) : null
               )}
             </Menu>
@@ -125,21 +122,18 @@ const PageAppBar = () => {
               display: { xs: 'flex', md: 'none' },
             }}
           >
-            <Link to={'/'}>
+            <NextLink href={'/'} passHref>
               <img src="logolocatec.png" alt="logo" height="45px" />
-            </Link>
+            </NextLink>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) =>
               page?.name ? (
-                <Button
-                  key={page.name}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                  to={page.route}
-                  component={Link}
-                >
-                  {page.name}
-                </Button>
+                <NextLink key={page.name} href={page.route} passHref>
+                  <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                    {page.name}
+                  </Button>
+                </NextLink>
               ) : null
             )}
           </Box>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Container, Grid, Link, Typography } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import { Link as RouterLink } from 'react-router-dom';
+import NextLink from 'next/link';
 import FAQQuestions from '../components/FAQQuestions';
 import Copyright from '../components/Copyright';
 import FoundItemIcon from '../icons/FoundItemsIcon';
@@ -65,8 +65,8 @@ const Home = () => {
               ) : (
                 <Button
                   variant="contained"
-                  component={RouterLink}
-                  to="/reportar"
+                  component={NextLink}
+                  href="/reportar"
                 >
                   Reportar Objeto
                 </Button>
@@ -206,7 +206,7 @@ const Home = () => {
               paragraph
             >
               Más información en{' '}
-              <Link component={RouterLink} to="/faq">
+              <Link component={NextLink} href="/faq">
                 FAQ
               </Link>
             </Typography>

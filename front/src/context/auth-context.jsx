@@ -24,8 +24,8 @@ export const useAuthContext = () => {
   const [state] = context;
 
   return {
-    login: () => (window.location = '/auth/google'),
-    logout: () => (window.location = '/auth/logout'),
+    login: () => (window.location = '/api/auth/signin'),
+    logout: () => (window.location = '/api/auth/logout'),
 
     user: state.user,
   };

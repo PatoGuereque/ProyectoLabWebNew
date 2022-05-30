@@ -3,27 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
+    "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.2",
     "@mui/lab": "^5.0.0-alpha.80",
     "@mui/material": "^5.6.3",
+    "@next-auth/prisma-adapter": "^1.0.3",
+    "@prisma/client": "^3.14.0",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "next": "^12.1.6",
+    "next-auth": "^4.3.4",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.30.0",
     "react-material-ui-carousel": "3.2.0",
-    "react-router-dom": "6",
-    "react-scripts": "5.0.0",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cross-env INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-scripts build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext \".jsx\""
@@ -51,7 +59,8 @@
     "cross-env": "^7.0.3",
     "http-proxy-middleware": "^2.0.6",
     "lint-staged": "^12.3.7",
-    "prettier": "^2.6.1"
+    "prettier": "^2.6.1",
+    "prisma": "^3.14.0"
   },
   "lint-staged": {
     "*.jsx": "prettier --write"
