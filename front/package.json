@@ -64,5 +64,8 @@
   },
   "lint-staged": {
     "*.jsx": "prettier --write"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

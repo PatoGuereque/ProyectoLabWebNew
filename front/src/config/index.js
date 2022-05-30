@@ -7,12 +7,11 @@ if (!isProd) {
 
 const port = process.env.PORT || 8000;
 
-const mongodbUri = process.env.MONGODB_URI;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const googleCallback = process.env.GOOGLE_CALLBACK;
 
-if (!mongodbUri || !googleClientId || !googleClientSecret || !googleCallback) {
+if (!googleClientId || !googleClientSecret || !googleCallback) {
   if (isProd) {
     throw new Error(
       'MONGODB_URI, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET or GOOGLE_CALLBACK  is undefined! Add it as an enviornment variable.'
@@ -24,4 +23,4 @@ if (!mongodbUri || !googleClientId || !googleClientSecret || !googleCallback) {
   }
 }
 
-export { port, mongodbUri, googleClientId, googleClientSecret, googleCallback };
+export { port, googleClientId, googleClientSecret, googleCallback };

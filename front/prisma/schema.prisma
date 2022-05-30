@@ -58,3 +58,23 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verificationtokens")
 }
+
+model Campus {
+  id         Int    @id @default(autoincrement())
+  name       String
+  locations  Location[]
+
+  @@unique([name])
+  @@map("campus")
+}
+
+model Location {
+  id       Int    @id @default(autoincrement())
+  campusId Int  @map("campus_id")
+  name     String
+
+  campus Campus @relation(fields: [campusId], references: [id], onDelete: Cascade)
+
+  @@unique([campusId, name])
+  @@map("location")
+}
