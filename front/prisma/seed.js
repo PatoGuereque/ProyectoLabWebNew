@@ -42,6 +42,16 @@ const ubicaciones = [
   'Rectoría',
 ];
 
+const categorias = [
+  'Audífonos',
+  'Cartera',
+  'Computadora',
+  'Llaves',
+  'Mochila',
+  'Teléfono',
+  'Termo',
+];
+
 async function main() {
   await prisma.$transaction(
     campus.map((campusName) =>
@@ -75,7 +85,21 @@ async function main() {
         update: {},
         create: {
           name: ubicacion,
-          campusId: mty.id
+          campusId: mty.id,
+        },
+      })
+    )
+  );
+
+  await prisma.$transaction(
+    categorias.map((category) =>
+      prisma.category.upsert({
+        where: {
+          name: category,
+        },
+        update: {},
+        create: {
+          name: category,
         },
       })
     )
