@@ -18,57 +18,47 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
+import prisma from '../lib/prisma';
 
-const campus = [
-  'Aguascalientes',
-  'Chiapas',
-  'Chihuahua',
-  'Ciudad de México',
-  'Ciudad Juárez',
-  'Ciudad Obregón',
-  'Cuernavaca',
-  'Estado de México',
-  'Guadalajara',
-  'Hidalgo',
-  'Irapuato',
-  'Laguna',
-  'León',
-  'Monterrey',
-  'Morelia',
-  'Puebla',
-  'Querétaro',
-  'Saltillo',
-  'San Luis Potosí',
-  'Santa Fe',
-  'Sinaloa',
-  'Sonora Norte',
-  'Tampico',
-  'Toluca',
-  'Zacatecas',
-];
+export const getServerSideProps = async ({}) => {
+  const categories = (await prisma.category.findMany())
+    .map((category) => category.name)
+    .sort();
+  const locations = (
+    await prisma.location.findMany({
+      include: {
+        campus: true,
+      },
+    })
+  ).reduce(
+    (acc, { campus: { id: campusId, name: campusName }, name: locName }) => {
+      if (!acc[campusId]) {
+        acc[campusId] = {
+          name: campusName,
+          locations: [],
+        };
+      }
+      acc[campusId].locations.push(locName);
+      return acc;
+    },
+    {}
+  );
 
-const ubicaciones = [
-  'Aulas 1',
-  'Aulas 2',
-  'Aulas 3',
-  'Aulas 4',
-  'Aulas 6',
-  'Aulas 7',
-  'Biblio',
-  'Cenrtrales',
-  'Jubileo',
-  'Rectoría',
-];
-
-const categorias = [
-  'Audífonos',
-  'Cartera',
-  'Computadora',
-  'Llaves',
-  'Mochila',
-  'Telefono',
-  'Termo',
-];
+  return {
+    props: {
+      categories,
+      locations,
+      campus: Object.entries(locations)
+        .map(([id, { name }]) => {
+          return {
+            id,
+            name,
+          };
+        })
+        .sort(),
+    },
+  };
+};
 
 setLocale({
   mixed: {
@@ -124,7 +114,7 @@ const MenuProps = {
   },
 };
 
-const ReportarObjeto = () => {
+const ReportarObjeto = ({ categories, locations, campus }) => {
   const { postObject, clearPostResponse, postResponse } = useObjectContext();
   const [loading, setLoading] = useState(false);
   const {
@@ -146,6 +136,7 @@ const ReportarObjeto = () => {
   });
 
   const imageBase64 = watch('imageBase64');
+  const currentCampus = watch('campus');
 
   useEffect(() => {
     return () => {
@@ -221,9 +212,9 @@ const ReportarObjeto = () => {
                         variant="outlined"
                         MenuProps={MenuProps}
                       >
-                        {campus.map((loc) => (
-                          <MenuItem key={loc} value={loc}>
-                            {loc}
+                        {campus.map(({ name, id }) => (
+                          <MenuItem key={id} value={id}>
+                            {name}
                           </MenuItem>
                         ))}
                       </Select>
@@ -253,12 +244,14 @@ const ReportarObjeto = () => {
                         fullWidth
                         variant="outlined"
                         MenuProps={MenuProps}
+                        disabled={!currentCampus}
                       >
-                        {ubicaciones.map((loc) => (
-                          <MenuItem key={loc} value={loc}>
-                            {loc}
-                          </MenuItem>
-                        ))}
+                        {currentCampus &&
+                          locations[currentCampus].locations.map((loc) => (
+                            <MenuItem key={loc} value={loc}>
+                              {loc}
+                            </MenuItem>
+                          ))}
                       </Select>
                       {errors.location && (
                         <FormHelperText>
@@ -289,7 +282,7 @@ const ReportarObjeto = () => {
                         variant="outlined"
                         MenuProps={MenuProps}
                       >
-                        {categorias.map((cat) => (
+                        {categories.map((cat) => (
                           <MenuItem key={cat} value={cat}>
                             {cat}
                           </MenuItem>

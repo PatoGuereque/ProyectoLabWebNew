@@ -37,7 +37,7 @@ const ubicaciones = [
   'Aulas 6',
   'Aulas 7',
   'Biblio',
-  'Cenrtrales',
+  'Centrales',
   'Jubileo',
   'Rectoría',
 ];
