@@ -15,6 +15,7 @@ import Logout from '@mui/icons-material/Logout';
 import { Divider, ListItemIcon } from '@mui/material';
 import NextLink from 'next/link';
 import { useAuthContext } from '../context/auth-context';
+import Image from 'next/image';
 
 const PageAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -63,15 +64,31 @@ const PageAppBar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
-            component="div"
             sx={{
               display: { xs: 'none', md: 'flex' },
               mr: 2,
             }}
           >
-            <NextLink href="/">
-              <img src="/logolocatec.png" alt="logo" height="45px" />
-            </NextLink>
+            <Box sx={{ height: 50, width: 150 }}>
+              <NextLink href="/">
+                <a>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      position: 'relative',
+                    }}
+                  >
+                    <Image
+                      src="/logolocatec.png"
+                      alt="logo"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </Box>
+                </a>
+              </NextLink>
+            </Box>
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -116,15 +133,31 @@ const PageAppBar = () => {
           </Box>
 
           <Box
-            component="div"
             sx={{
               flexGrow: 1,
               display: { xs: 'flex', md: 'none' },
             }}
           >
-            <NextLink href={'/'} passHref>
-              <img src="logolocatec.png" alt="logo" height="45px" />
-            </NextLink>
+            <Box sx={{ height: 50, width: 150 }}>
+              <NextLink href="/">
+                <a>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      position: 'relative',
+                    }}
+                  >
+                    <Image
+                      src="/logolocatec.png"
+                      alt="logo"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  </Box>
+                </a>
+              </NextLink>
+            </Box>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) =>

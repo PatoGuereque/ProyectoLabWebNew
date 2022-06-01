@@ -7,6 +7,7 @@ import Copyright from '../components/Copyright';
 import FoundItemIcon from '../icons/FoundItemsIcon';
 import LostItemsIcon from '../icons/LostItemsIcon';
 import { useAuthContext } from '../context/auth-context';
+import Image from 'next/image';
 
 const images = ['book', 'card', 'key', 'mobile', 'name', 'screen'];
 
@@ -20,7 +21,7 @@ const Home = () => {
           container
           sx={{
             alignItems: 'center',
-            minHeight: 'calc(100vh - 68.5px)',
+            minHeight: '80vh',
           }}
         >
           <Grid
@@ -93,10 +94,10 @@ const Home = () => {
                     height: '500px',
                   }}
                 >
-                  <img
+                  <Image
                     src={`/icons/${image}.svg`}
-                    height="500px"
-                    width="100%"
+                    layout="fill"
+                    objectFit="contain"
                     alt="img"
                   />
                 </Container>
@@ -109,7 +110,10 @@ const Home = () => {
             item
             xs={12}
             sx={{
-              minHeight: '50vh',
+              minHeight: {
+                xs: '80vh',
+                md: '50vh',
+              },
             }}
           >
             <Typography

@@ -23,4 +23,4 @@ if (!googleClientId || !googleClientSecret || !googleCallback) {
   }
 }
 
-export { port, googleClientId, googleClientSecret, googleCallback };
+export { port, googleClientId, googleClientSecret, googleCallback, isProd };
