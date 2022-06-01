@@ -6,13 +6,13 @@ import FAQQuestions from '../components/FAQQuestions';
 import Copyright from '../components/Copyright';
 import FoundItemIcon from '../icons/FoundItemsIcon';
 import LostItemsIcon from '../icons/LostItemsIcon';
-import { useAuthContext } from '../context/auth-context';
 import Image from 'next/image';
+import { useSession, signIn } from 'next-auth/react';
 
 const images = ['book', 'card', 'key', 'mobile', 'name', 'screen'];
 
 const Home = () => {
-  const { user, login } = useAuthContext();
+  const { data: session } = useSession();
 
   return (
     <>
@@ -59,18 +59,16 @@ const Home = () => {
                 mt: 6,
               }}
             >
-              {user === undefined ? (
-                <Button variant="contained" onClick={login}>
+              {session === undefined ? (
+                <Button variant="contained" onClick={signIn}>
                   Iniciar Sesión
                 </Button>
               ) : (
-                <Button
-                  variant="contained"
-                  component={NextLink}
-                  href="/reportar"
-                >
-                  Reportar Objeto
-                </Button>
+                <NextLink href="/reportar">
+                  <a>
+                    <Button variant="contained">Reportar Objeto</Button>
+                  </a>
+                </NextLink>
               )}
             </Box>
           </Grid>

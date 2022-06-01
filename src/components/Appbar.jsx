@@ -14,26 +14,26 @@ import MenuItem from '@mui/material/MenuItem';
 import Logout from '@mui/icons-material/Logout';
 import { Divider, ListItemIcon } from '@mui/material';
 import NextLink from 'next/link';
-import { useAuthContext } from '../context/auth-context';
 import Image from 'next/image';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const PageAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, login, logout } = useAuthContext();
+  const { data: session } = useSession();
 
   const pages = [
     {
       name: 'Inicio',
       route: '/',
     },
-    user
+    session
       ? {
           name: 'Objetos Perdidos',
           route: '/objetos',
         }
       : {},
-    user
+    session
       ? {
           name: 'Reportar Objetos',
           route: '/reportar',
@@ -172,11 +172,11 @@ const PageAppBar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {user !== undefined ? (
+            {session ? (
               <>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={user.name} />
+                    <Avatar alt={session.user.name} src={session.user.image} />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -222,12 +222,12 @@ const PageAppBar = () => {
                   }}
                 >
                   <MenuItem>
-                    <Avatar />
-                    {user.firstName} {user.lastName}
+                    <Avatar alt={session.user.name} src={session.user.image} />
+                    {session.user.name}
                   </MenuItem>
 
                   <Divider />
-                  <MenuItem onClick={logout}>
+                  <MenuItem onClick={signOut}>
                     <ListItemIcon>
                       <Logout fontSize="small" />
                     </ListItemIcon>
@@ -238,7 +238,7 @@ const PageAppBar = () => {
             ) : (
               <Button
                 sx={{ my: 2, color: 'white', display: 'block' }}
-                onClick={login}
+                onClick={signIn}
               >
                 Login
               </Button>

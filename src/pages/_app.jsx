@@ -6,9 +6,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import { SessionProvider } from 'next-auth/react';
 import createEmotionCache from '../helpers/createEmotionCache';
-import { AuthContextProvider } from '../context/auth-context';
 import { ObjectContextProvider } from '../context/objects-context';
 import PageAppBar from '../components/Appbar';
+import { useSession, signIn } from 'next-auth/react';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -47,22 +47,43 @@ export default function App(props) {
       </Head>
 
       <SessionProvider session={session}>
-        <AuthContextProvider>
-          <ObjectContextProvider>
-            <ThemeProvider theme={darkTheme}>
-              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-              <CssBaseline />
-              <PageAppBar />
-              <main>
+        <ObjectContextProvider>
+          <ThemeProvider theme={darkTheme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <PageAppBar />
+            <main>
+              {Component.auth ? (
+                <Auth>
+                  <Component {...pageProps} />
+                </Auth>
+              ) : (
                 <Component {...pageProps} />
-              </main>
-            </ThemeProvider>
-          </ObjectContextProvider>
-        </AuthContextProvider>
+              )}
+            </main>
+          </ThemeProvider>
+        </ObjectContextProvider>
       </SessionProvider>
     </CacheProvider>
   );
 }
+
+const Auth = ({ children }) => {
+  const { data: session, status } = useSession();
+  const isUser = !!session?.user;
+  React.useEffect(() => {
+    if (status === 'loading') return;
+    if (!isUser) signIn();
+  }, [isUser, status]);
+
+  if (isUser) {
+    return children;
+  }
+
+  // Session is being fetched, or no user.
+  // If no user, useEffect() will redirect.
+  return <div>Loading...</div>;
+};
 
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,

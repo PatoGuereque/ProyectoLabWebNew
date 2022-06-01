@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { useForm, Controller } from 'react-hook-form';
-import { object, string, mixed, setLocale } from 'yup';
+import { object, string, mixed, setLocale, number } from 'yup';
 import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -22,7 +22,12 @@ import prisma from '../lib/prisma';
 
 export const getServerSideProps = async ({}) => {
   const categories = (await prisma.category.findMany())
-    .map((category) => category.name)
+    .map(({ name, id }) => {
+      return {
+        name,
+        id,
+      };
+    })
     .sort();
   const locations = (
     await prisma.location.findMany({
@@ -31,14 +36,20 @@ export const getServerSideProps = async ({}) => {
       },
     })
   ).reduce(
-    (acc, { campus: { id: campusId, name: campusName }, name: locName }) => {
+    (
+      acc,
+      { campus: { id: campusId, name: campusName }, name: locName, id }
+    ) => {
       if (!acc[campusId]) {
         acc[campusId] = {
           name: campusName,
           locations: [],
         };
       }
-      acc[campusId].locations.push(locName);
+      acc[campusId].locations.push({
+        name: locName,
+        id,
+      });
       return acc;
     },
     {}
@@ -74,9 +85,9 @@ const userSchema = object({
     .test('fileSize', 'Foto demasiado grande (Max 10mb)', (value) => {
       return value && value[0].size <= 10_485_760;
     }),
-  campus: string().required(),
-  category: string().required(),
-  location: string().required(),
+  campus: number().required(),
+  category: number().required(),
+  location: number().required(),
   comments: string().required(),
 });
 
@@ -247,11 +258,13 @@ const ReportarObjeto = ({ categories, locations, campus }) => {
                         disabled={!currentCampus}
                       >
                         {currentCampus &&
-                          locations[currentCampus].locations.map((loc) => (
-                            <MenuItem key={loc} value={loc}>
-                              {loc}
-                            </MenuItem>
-                          ))}
+                          locations[currentCampus].locations.map(
+                            ({ name, id }) => (
+                              <MenuItem key={name} value={id}>
+                                {name}
+                              </MenuItem>
+                            )
+                          )}
                       </Select>
                       {errors.location && (
                         <FormHelperText>
@@ -282,9 +295,9 @@ const ReportarObjeto = ({ categories, locations, campus }) => {
                         variant="outlined"
                         MenuProps={MenuProps}
                       >
-                        {categories.map((cat) => (
-                          <MenuItem key={cat} value={cat}>
-                            {cat}
+                        {categories.map(({ name, id }) => (
+                          <MenuItem key={name} value={id}>
+                            {name}
                           </MenuItem>
                         ))}
                       </Select>
@@ -358,5 +371,7 @@ const ReportarObjeto = ({ categories, locations, campus }) => {
     </form>
   );
 };
+
+ReportarObjeto.auth = true;
 
 export default ReportarObjeto;
