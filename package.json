@@ -38,7 +38,8 @@
     "prepare": "husky install && prisma generate",
     "db-reset": "prisma db reset",
     "db-push": "prisma db push",
-    "create-migration": "prisma migrate dev"
+    "create-migration": "prisma migrate dev",
+    "setup-db": "prisma db push && prisma db seed"
   },
   "proxy": "http://localhost:8000",
   "eslintConfig": {
