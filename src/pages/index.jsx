@@ -59,7 +59,7 @@ const Home = () => {
                 mt: 6,
               }}
             >
-              {session === undefined ? (
+              {!session ? (
                 <Button variant="contained" onClick={signIn}>
                   Iniciar Sesión
                 </Button>
