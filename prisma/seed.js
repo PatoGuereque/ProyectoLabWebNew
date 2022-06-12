@@ -27,6 +27,7 @@ const campus = [
   'Tampico',
   'Toluca',
   'Zacatecas',
+  'Otro',
 ];
 
 const ubicaciones = [
@@ -40,6 +41,7 @@ const ubicaciones = [
   'Centrales',
   'Jubileo',
   'Rectoría',
+  'Otro',
 ];
 
 const categorias = [
