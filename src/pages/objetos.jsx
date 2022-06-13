@@ -11,10 +11,18 @@ import { useObjectContext } from '../context/objects-context';
 
 import AppPagination from '../components/AppPagination';
 import Filter from '../components/Filter';
+import { useEffect } from 'react';
 
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
   const [showAlert, editAlert] = useState(false);
+  const [page, setPage] = useState(1);
+  const [numberPages, setNumberPages] = useState(10);
+
+  const getNumberPages = (objects, pageSize = 8) => {
+    const numObjects = objects.length;
+    setNumberPages(Math.ceil(numObjects / pageSize));
+  };
 
   const offset = (page, pageSize = 8) => {
     let inferiorLimit = (page - 1) * pageSize;
@@ -22,9 +30,9 @@ const ObjetosEncontrados = () => {
     return [inferiorLimit, superiorLimit];
   };
 
-  const pageLimits = offset(1, 8);
+  const [inferiorLimit, superiorLimit] = offset(page, 8);
   const mappedObjects = objects
-    .slice(pageLimits[0], pageLimits[1])
+    .slice(inferiorLimit, superiorLimit)
     .map(
       ({
         id,
@@ -62,6 +70,10 @@ const ObjetosEncontrados = () => {
       )
     );
 
+  useEffect(() => {
+    getNumberPages(objects);
+  }, [objects]);
+
   return (
     <>
       <div style={{ margin: 30 }}>
@@ -80,7 +92,7 @@ const ObjetosEncontrados = () => {
         </Grid>
 
         <br />
-        <AppPagination />
+        <AppPagination setPage={setPage} pageNumber={numberPages} />
       </div>
     </>
   );
