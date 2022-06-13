@@ -56,6 +56,7 @@ const ObjetosEncontrados = () => {
     ({
       id,
       image,
+      comments,
       category: { name: categoryName },
       location: { name: locationName },
     }) => (
@@ -82,7 +83,7 @@ const ObjetosEncontrados = () => {
                 Localizado en: {locationName}
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Comentarios: Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                Comentarios: {comments}
               </Typography>
             </Box>
           </Modal>
