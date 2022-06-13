@@ -3,10 +3,14 @@ import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import { useObjectContext } from '../context/objects-context';
 
 const Filter = () => {
+  //const { objects, deactivateObject } = useObjectContext();
+  const [results, setResults] = useState([]);
+
   return (
-    <Stack spacing={3} sx={{ width: 500 }}>
+    <Stack spacing={3} sx={{ width: 300 }}>
       <Autocomplete
         multiple
         id="tags-standard"

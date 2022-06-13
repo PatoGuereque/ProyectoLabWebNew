@@ -115,11 +115,12 @@ const ObjetosEncontrados = () => {
             <CardActionArea onClick={handleModalOpen({ id })}>
               <CardMedia component="img" height="180" src={image} />
               <CardContent>
-                <ThemeProvider theme={theme}>
-                  <Typography variant="h4" component="div" align="center">
-                    {categoryName}
-                  </Typography>
-                </ThemeProvider>
+                <Typography gutterBottom variant="h5" component="div">
+                  {categoryName}
+                </Typography>
+                <Typography gutterBottom variant="h6" component="div">
+                  {locationName}
+                </Typography>
               </CardContent>
             </CardActionArea>
             <CardActions>
