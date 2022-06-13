@@ -16,8 +16,15 @@ const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
   const [showAlert, editAlert] = useState(false);
 
+  const offset = (page, pageSize = 8) => {
+    let inferiorLimit = (page - 1) * pageSize;
+    let superiorLimit = inferiorLimit + pageSize;
+    return [inferiorLimit, superiorLimit];
+  };
+
+  const pageLimits = offset(1, 8);
   const mappedObjects = objects
-    .slice(0, 8)
+    .slice(pageLimits[0], pageLimits[1])
     .map(
       ({
         id,
@@ -63,6 +70,10 @@ const ObjetosEncontrados = () => {
             Tienes que iniciar sesión para reportar un objeto
           </Alert>
         ) : null}
+
+        <Grid container spacing={2}>
+          <Filter />
+        </Grid>
 
         <Grid container spacing={2}>
           {mappedObjects}
