@@ -17,10 +17,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import { Chip } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+import AppPagination from '../components/AppPagination';
+import Filter from '../components/Filter';
+import { useEffect } from 'react';
+
+import { Chip } from '@mui/material';
 
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
@@ -32,6 +39,19 @@ const ObjetosEncontrados = () => {
   const handleOpen = () => { setOpen(true); }
   const handleClose = () => setOpen(false);
   const reclama = () => user ? deactivateObject({id: object._id,}) : editAlert(true)
+  const [page, setPage] = useState(1);
+  const [numberPages, setNumberPages] = useState(10);
+
+  const getNumberPages = (objects, pageSize = 8) => {
+    const numObjects = objects.length;
+    setNumberPages(Math.ceil(numObjects / pageSize));
+  };
+
+  const offset = (page, pageSize = 8) => {
+    let inferiorLimit = (page - 1) * pageSize;
+    let superiorLimit = inferiorLimit + pageSize;
+    return [inferiorLimit, superiorLimit];
+  };
 
   const CustomizedCard = styled(Card)`
     transition: all .2s ease-in-out;
@@ -65,7 +85,7 @@ const ObjetosEncontrados = () => {
     boxShadow: 24,
     p: 4,
   };
-
+  const [inferiorLimit, superiorLimit] = offset(page, 8);
   const mappedObjects = objects.map(
     ({
       id,
@@ -106,6 +126,9 @@ const ObjetosEncontrados = () => {
             <Button size="small" onClick={handleOpen}>
               RECLAMAR
             </Button>
+            <Chip label="Activo" color="primary" variant="outlined" />
+            <Chip label="Inactivo" color="warning" variant="outlined" />
+            <Chip label="En revision" color="success" variant="outlined" />
             <Dialog
               open={open}
               TransitionComponent={Transition}
@@ -133,6 +156,10 @@ const ObjetosEncontrados = () => {
     )
   );
 
+  useEffect(() => {
+      getNumberPages(objects);
+    }, [objects]);
+
   return (
     <>
       <div style={{ margin: 30 }}>
@@ -141,9 +168,18 @@ const ObjetosEncontrados = () => {
             Por favor, inicia sesión para poder reportar un objeto.
           </Alert>
         ) : null}
+
+        <Grid container spacing={2}>
+          <Filter />
+        </Grid>
+        <br />
+
         <Grid container spacing={2}>
           {mappedObjects}
         </Grid>
+
+        <br />
+        <AppPagination setPage={setPage} pageNumber={numberPages} />
       </div>
     </>
   );
