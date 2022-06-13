@@ -42,7 +42,7 @@ const ObjetosEncontrados = () => {
         category: { name: categoryName },
         location: { name: locationName },
       }) => (
-        <Grid item xs={5} md={3} key={id}>
+        <Grid item xs={6} md={3} key={id}>
           <Card variant="outlined" sx={{ maxWidth: 345 }}>
             <CardMedia component="img" height="140" src={image} />
             <CardContent>
