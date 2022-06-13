@@ -13,6 +13,8 @@ import AppPagination from '../components/AppPagination';
 import Filter from '../components/Filter';
 import { useEffect } from 'react';
 
+import { Chip } from '@mui/material';
+
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
   const [showAlert, editAlert] = useState(false);
@@ -64,6 +66,10 @@ const ObjetosEncontrados = () => {
               >
                 RECLAMAR
               </Button>
+
+              <Chip label="Activo" color="primary" variant="outlined" />
+              <Chip label="Inactivo" color="warning" variant="outlined" />
+              <Chip label="En revision" color="success" variant="outlined" />
             </CardActions>
           </Card>
         </Grid>
@@ -86,6 +92,7 @@ const ObjetosEncontrados = () => {
         <Grid container spacing={2}>
           <Filter />
         </Grid>
+        <br />
 
         <Grid container spacing={2}>
           {mappedObjects}
