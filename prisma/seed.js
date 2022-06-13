@@ -52,6 +52,7 @@ const categorias = [
   'Mochila',
   'Teléfono',
   'Termo',
+  'Otro',
 ];
 
 async function main() {
