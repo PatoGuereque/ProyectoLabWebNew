@@ -11,13 +11,27 @@ import { useObjectContext } from '../context/objects-context';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
   const [showAlert, editAlert] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const [modalOpen, setModal] = useState(false)
+  const handleModalOpen = () => setModal(true);
+  const handleModalClose = () => setModal(false);
+  const handleOpen = () => { setOpen(true); }
   const handleClose = () => setOpen(false);
+  const reclama = () => user ? deactivateObject({id: object._id,}) : editAlert(true)
 
   const CustomizedCard = styled(Card)`
     transition: all .2s ease-in-out;
@@ -57,12 +71,13 @@ const ObjetosEncontrados = () => {
       id,
       image,
       comments,
+      campus,
       category: { name: categoryName },
       location: { name: locationName },
     }) => (
       <Grid item xs={5} md={3} key={id}>
         <CustomizedCard variant="outlined" sx={{ maxWidth: 345 }}>
-          <CardActionArea onClick={handleOpen}>
+          <CardActionArea onClick={handleModalOpen}>
             <CardMedia component="img" height="180" src={image} />
             <CardContent>
               <ThemeProvider theme={theme}>
@@ -73,14 +88,14 @@ const ObjetosEncontrados = () => {
             </CardContent>
           </CardActionArea>
           <Modal
-            open={open}
-            onClose={handleClose}
+            open={modalOpen}
+            onClose={handleModalClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                Localizado en: {locationName}
+                Localizado en: {campus}, {locationName}
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Comentarios: {comments}
@@ -88,18 +103,30 @@ const ObjetosEncontrados = () => {
             </Box>
           </Modal>
           <CardActions>
-            <Button
-              size="small"
-              onClick={() =>
-                user
-                  ? deactivateObject({
-                      id: object._id,
-                    })
-                  : editAlert(true)
-              }
-            >
+            <Button size="small" onClick={handleOpen}>
               RECLAMAR
             </Button>
+            <Dialog
+              open={open}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={handleClose}
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle>{"¿Reclamar objeto?"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                  Esta opción marcará el objeto reportado como suyo.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Cancelar</Button>
+                <Button onClick={() => {
+                  handleClose();
+                  reclama();
+                }}>Reclamar</Button>
+              </DialogActions>
+            </Dialog>
           </CardActions>
         </CustomizedCard>
       </Grid>
