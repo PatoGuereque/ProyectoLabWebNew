@@ -45,10 +45,6 @@ export default function App(props) {
           name="description"
           content="Reportar objetos perdidos en LocaTEC"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;900&display=swap"
-          rel="stylesheet"
-        ></link>
         <title>LocaTEC</title>
       </Head>
 
