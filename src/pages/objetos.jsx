@@ -8,7 +8,11 @@ import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import { styled } from '@mui/material/styles';
 import { useObjectContext } from '../context/objects-context';
-import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  responsiveFontSizes,
+  ThemeProvider,
+} from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
@@ -17,7 +21,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { Chip } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -33,12 +36,15 @@ const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
   const [showAlert, editAlert] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const [modalOpen, setModal] = useState(false)
+  const [modalOpen, setModal] = useState(false);
   const handleModalOpen = () => setModal(true);
   const handleModalClose = () => setModal(false);
-  const handleOpen = () => { setOpen(true); }
+  const handleOpen = () => {
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
-  const reclama = () => user ? deactivateObject({id: object._id,}) : editAlert(true)
+  const reclama = () =>
+    user ? deactivateObject({ id: object._id }) : editAlert(true);
   const [page, setPage] = useState(1);
   const [numberPages, setNumberPages] = useState(10);
 
@@ -54,7 +60,7 @@ const ObjetosEncontrados = () => {
   };
 
   const CustomizedCard = styled(Card)`
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     :hover {
       transform: scale(1.025);
@@ -71,7 +77,7 @@ const ObjetosEncontrados = () => {
     },
     [theme.breakpoints.up('md')]: {
       fontSize: '2.4rem',
-    }
+    },
   };
 
   const style = {
@@ -101,7 +107,7 @@ const ObjetosEncontrados = () => {
             <CardMedia component="img" height="180" src={image} />
             <CardContent>
               <ThemeProvider theme={theme}>
-                <Typography  variant="h4" component="div" align="center">
+                <Typography variant="h4" component="div" align="center">
                   {categoryName}
                 </Typography>
               </ThemeProvider>
@@ -136,7 +142,7 @@ const ObjetosEncontrados = () => {
               onClose={handleClose}
               aria-describedby="alert-dialog-slide-description"
             >
-              <DialogTitle>{"¿Reclamar objeto?"}</DialogTitle>
+              <DialogTitle>{'¿Reclamar objeto?'}</DialogTitle>
               <DialogContent>
                 <DialogContentText id="alert-dialog-slide-description">
                   Esta opción marcará el objeto reportado como suyo.
@@ -144,10 +150,14 @@ const ObjetosEncontrados = () => {
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Cancelar</Button>
-                <Button onClick={() => {
-                  handleClose();
-                  reclama();
-                }}>Reclamar</Button>
+                <Button
+                  onClick={() => {
+                    handleClose();
+                    reclama();
+                  }}
+                >
+                  Reclamar
+                </Button>
               </DialogActions>
             </Dialog>
           </CardActions>
@@ -157,8 +167,8 @@ const ObjetosEncontrados = () => {
   );
 
   useEffect(() => {
-      getNumberPages(objects);
-    }, [objects]);
+    getNumberPages(objects);
+  }, [objects]);
 
   return (
     <>
