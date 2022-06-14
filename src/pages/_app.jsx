@@ -10,6 +10,7 @@ import { ObjectContextProvider } from '../context/objects-context';
 import PageAppBar from '../components/Appbar';
 import { useSession, signIn } from 'next-auth/react';
 import NextNProgress from 'nextjs-progressbar';
+import './404.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

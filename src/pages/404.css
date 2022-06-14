@@ -1,7 +1,3 @@
-body {
-  background-color: #fffbff;
-}
-
 .mainbox {
   margin: auto;
   height: 100%;
@@ -9,11 +5,11 @@ body {
   position: absolute;
 }
 
-  .err {
-    text-align: center;
-    color: #2596be;
-    font-size: 11rem;
-  }
+.err {
+  text-align: center;
+  color: #2596be;
+  font-size: 11rem;
+}
 
 .msg {
     text-align: center;
