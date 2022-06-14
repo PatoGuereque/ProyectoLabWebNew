@@ -9,8 +9,6 @@ import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import { useObjectContext } from '../context/objects-context';
 
-import { usePlaceContext } from '../context/places-context';
-
 import AppPagination from '../components/AppPagination';
 import Filter from '../components/Filter';
 import { CardActionArea, Chip } from '@mui/material';
@@ -36,7 +34,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 var openedModal, openedLocation, openedCampus, openedImage, openedComments;
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
-  const { places } = usePlaceContext();
+
   const [showAlert, editAlert] = useState(false);
   //Pagination Objects
   const [page, setPage] = useState(1);
@@ -113,6 +111,7 @@ const ObjetosEncontrados = () => {
         campus,
         category: { name: categoryName },
         location: { name: locationName },
+        status,
       }) => (
         <Grid item xs={6} md={3} key={id}>
           <CustomizedCard variant="outlined" sx={{ maxWidth: 345 }}>
@@ -131,10 +130,13 @@ const ObjetosEncontrados = () => {
               <Button size="small" onClick={handleOpen}>
                 RECLAMAR
               </Button>
-
-              <Chip label="Activo" color="primary" />
-              <Chip label="Inactivo" color="warning" />
-              <Chip label="En revision" color="success" />
+              {status == 'UNCLAIMED' ? (
+                <Chip label="Activo" color="primary" />
+              ) : status == 'CLAIMED' ? (
+                <Chip label="Inactivo" color="warning" />
+              ) : (
+                <Chip label="En revision" color="success" />
+              )}
             </CardActions>
           </CustomizedCard>
         </Grid>
