@@ -1,22 +1,17 @@
 import React from 'react';
-import NextLink from 'next/link';
 
 export default function Custom404() {
   return (
-    <div>
-      <div className="err">404</div>
-      <div className="msg">
-        ¡Oops! Parece que esta página también se perdió...
-        <br />
-        <p>
-          <NextLink href="/">
-            <div>
-              <a className="backBtn">Regresemos</a>
-              {' '}a buscarla, seguro alguien ya levantó reporte.
-            </div>
-          </NextLink>
-        </p>
-      </div>
-    </div>
+    <div id="notfound">
+		<div className="notfound">
+			<div className="notfound-404">
+				<h3>¡Oops! Parece que esta página se perdió...</h3>
+				<h1><span>4</span><span>0</span><span>4</span></h1>
+			</div>
+            <h2>
+                No te preocupes, seguramente alguien ya levantó un reporte. ¡Búscala en tu LocaTec más cercano!
+            </h2>
+		</div>
+	</div>
   );
 }
