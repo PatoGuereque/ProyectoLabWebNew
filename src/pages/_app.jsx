@@ -7,6 +7,8 @@ import { CacheProvider } from '@emotion/react';
 import { SessionProvider } from 'next-auth/react';
 import createEmotionCache from '../helpers/createEmotionCache';
 import { ObjectContextProvider } from '../context/objects-context';
+import { PlaceContextProvider } from '../context/places-context';
+
 import PageAppBar from '../components/Appbar';
 import { useSession, signIn } from 'next-auth/react';
 import NextNProgress from 'nextjs-progressbar';
@@ -50,21 +52,23 @@ export default function App(props) {
 
       <SessionProvider session={session}>
         <ObjectContextProvider>
-          <ThemeProvider theme={darkTheme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <PageAppBar />
-            <main>
-              <NextNProgress />
-              {Component.auth ? (
-                <Auth>
+          <PlaceContextProvider>
+            <ThemeProvider theme={darkTheme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              <PageAppBar />
+              <main>
+                <NextNProgress />
+                {Component.auth ? (
+                  <Auth>
+                    <Component {...pageProps} />
+                  </Auth>
+                ) : (
                   <Component {...pageProps} />
-                </Auth>
-              ) : (
-                <Component {...pageProps} />
-              )}
-            </main>
-          </ThemeProvider>
+                )}
+              </main>
+            </ThemeProvider>
+          </PlaceContextProvider>
         </ObjectContextProvider>
       </SessionProvider>
     </CacheProvider>
