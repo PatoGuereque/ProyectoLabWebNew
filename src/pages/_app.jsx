@@ -10,6 +10,7 @@ import { ObjectContextProvider } from '../context/objects-context';
 import PageAppBar from '../components/Appbar';
 import { useSession, signIn } from 'next-auth/react';
 import NextNProgress from 'nextjs-progressbar';
+import './404.css';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -44,6 +45,14 @@ export default function App(props) {
           name="description"
           content="Reportar objetos perdidos en LocaTEC"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        ></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@600;900&display=swap"
+          rel="stylesheet"
+        ></link>
         <title>LocaTEC</title>
       </Head>
 

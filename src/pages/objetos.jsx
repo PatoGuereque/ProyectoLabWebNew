@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -21,23 +21,22 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import AppPagination from '../components/AppPagination';
+import Filter from '../components/Filter';
+import { Chip } from '@mui/material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
-import AppPagination from '../components/AppPagination';
-import Filter from '../components/Filter';
-import { useEffect } from 'react';
-
-import { Chip } from '@mui/material';
 
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
   const [showAlert, editAlert] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [modalOpen, setModal] = useState(false);
-  const handleModalOpen = () => setModal(true);
+  const handleModalOpen = () => {
+    setModal(true);
+  };
   const handleModalClose = () => setModal(false);
   const handleOpen = () => {
     setOpen(true);
@@ -47,6 +46,8 @@ const ObjetosEncontrados = () => {
     user ? deactivateObject({ id: object._id }) : editAlert(true);
   const [page, setPage] = useState(1);
   const [numberPages, setNumberPages] = useState(10);
+
+  var locationVar, campusVar, commentsVar, imageVar;
 
   const getNumberPages = (objects, pageSize = 8) => {
     const numObjects = objects.length;
@@ -113,21 +114,6 @@ const ObjetosEncontrados = () => {
               </ThemeProvider>
             </CardContent>
           </CardActionArea>
-          <Modal
-            open={modalOpen}
-            onClose={handleModalClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Localizado en: {campus}, {locationName}
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Comentarios: {comments}
-              </Typography>
-            </Box>
-          </Modal>
           <CardActions>
             <Button size="small" onClick={handleOpen}>
               RECLAMAR
@@ -135,33 +121,26 @@ const ObjetosEncontrados = () => {
             <Chip label="Activo" color="primary" variant="outlined" />
             <Chip label="Inactivo" color="warning" variant="outlined" />
             <Chip label="En revision" color="success" variant="outlined" />
-            <Dialog
-              open={open}
-              TransitionComponent={Transition}
-              keepMounted
-              onClose={handleClose}
-              aria-describedby="alert-dialog-slide-description"
-            >
-              <DialogTitle>{'¿Reclamar objeto?'}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-slide-description">
-                  Esta opción marcará el objeto reportado como suyo.
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancelar</Button>
-                <Button
-                  onClick={() => {
-                    handleClose();
-                    reclama();
-                  }}
-                >
-                  Reclamar
-                </Button>
-              </DialogActions>
-            </Dialog>
           </CardActions>
         </CustomizedCard>
+        <Modal
+          open={modalOpen}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          hideBackdrop={true}
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Localizado en: {campus}, {locationName}
+            </Typography>
+            <CardMedia component="img" height="180" src={image} />
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Comentarios: {comments}
+            </Typography>
+            <br />
+            <Button onClick={handleModalClose}>Cerrar</Button>
+          </Box>
+        </Modal>
       </Grid>
     )
   );
@@ -178,7 +157,31 @@ const ObjetosEncontrados = () => {
             Por favor, inicia sesión para poder reportar un objeto.
           </Alert>
         ) : null}
-
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>{'¿Reclamar objeto?'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Esta opción marcará el objeto reportado como suyo.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            <Button
+              onClick={() => {
+                handleClose();
+                reclama();
+              }}
+            >
+              Reclamar
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Grid container spacing={2}>
           <Filter />
         </Grid>
