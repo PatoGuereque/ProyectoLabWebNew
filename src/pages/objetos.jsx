@@ -30,7 +30,7 @@ import Slide from '@mui/material/Slide';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
+var openedModal, openedLocation, openedCampus, openedImage, openedComments;
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
   const [showAlert, editAlert] = useState(false);
@@ -50,7 +50,12 @@ const ObjetosEncontrados = () => {
   const [inferiorLimit, superiorLimit] = offset(page, 8);
   //Modal Objects
   const [modalOpen, setModal] = useState(false);
-  const handleModalOpen = () => {
+  const handleModalOpen = (id) => () => {
+    openedModal = id.id;
+    openedCampus = objects[openedModal - 1].location.campus.name;
+    openedLocation = objects[openedModal - 1].location.name;
+    openedImage = objects[openedModal - 1].image;
+    openedComments = objects[openedModal - 1].comments;
     setModal(true);
   };
   const handleModalClose = () => setModal(false);
@@ -107,7 +112,7 @@ const ObjetosEncontrados = () => {
       }) => (
         <Grid item xs={6} md={3} key={id}>
           <CustomizedCard variant="outlined" sx={{ maxWidth: 345 }}>
-            <CardActionArea onClick={handleModalOpen}>
+            <CardActionArea onClick={handleModalOpen({ id })}>
               <CardMedia component="img" height="180" src={image} />
               <CardContent>
                 <ThemeProvider theme={theme}>
@@ -126,24 +131,6 @@ const ObjetosEncontrados = () => {
               <Chip label="En revision" color="success" variant="outlined" />
             </CardActions>
           </CustomizedCard>
-          <Modal
-            open={modalOpen}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            hideBackdrop={true}
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Localizado en: {campus}, {locationName}
-              </Typography>
-              <CardMedia component="img" height="180" src={image} />
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Comentarios: {comments}
-              </Typography>
-              <br />
-              <Button onClick={handleModalClose}>Cerrar</Button>
-            </Box>
-          </Modal>
         </Grid>
       )
     );
@@ -155,6 +142,24 @@ const ObjetosEncontrados = () => {
   return (
     <>
       <div>
+        <Modal
+          open={modalOpen}
+          onClose={handleModalClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Localizado en: {openedCampus}, {openedLocation}
+            </Typography>
+            <CardMedia component="img" height="180" src={openedImage} />
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Comentarios: {openedComments}
+            </Typography>
+            <br />
+            <Button onClick={handleModalClose}>Cerrar</Button>
+          </Box>
+        </Modal>
         <Dialog
           open={open}
           TransitionComponent={Transition}
