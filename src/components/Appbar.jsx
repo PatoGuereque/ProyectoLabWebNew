@@ -154,7 +154,12 @@ const PageAppBar = () => {
                 page?.name ? (
                   <NextLink key={page.name} href={page.route} passHref>
                     <MenuItem onClick={handleCloseNavMenu}>
-                      <Typography textAlign="center">{page.name}</Typography>
+                      <Typography
+                        textAlign="center"
+                        sx={{ textDecoration: page.isActive }}
+                      >
+                        {page.name}
+                      </Typography>
                     </MenuItem>
                   </NextLink>
                 ) : null
