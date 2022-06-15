@@ -15,35 +15,65 @@ import Logout from '@mui/icons-material/Logout';
 import { Divider, ListItemIcon } from '@mui/material';
 import NextLink from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
+
+var currPage = 0;
 
 const PageAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const pages = [
     {
       name: 'Inicio',
       route: '/',
+      isActive: 'none',
     },
     session
       ? {
           name: 'Objetos Perdidos',
           route: '/objetos',
+          isActive: 'none',
         }
       : {},
     session
       ? {
           name: 'Reportar Objetos',
           route: '/reportar',
+          isActive: 'none',
         }
       : {},
     {
       name: 'FAQ',
       route: '/faq',
+      isActive: 'none',
     },
   ];
+
+  for (let i = 0; i < 4; i++) {
+    pages[i].isActive = 'none';
+  }
+
+  switch (router.pathname) {
+    case '/':
+      pages[0].isActive = 'underline';
+      break;
+    case '/objetos':
+      pages[1].isActive = 'underline';
+      break;
+    case '/reportar':
+      pages[2].isActive = 'underline';
+      break;
+    case '/faq':
+      pages[3].isActive = 'underline';
+      break;
+    default:
+    //
+  }
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -164,7 +194,9 @@ const PageAppBar = () => {
               page?.name ? (
                 <NextLink key={page.name} href={page.route} passHref>
                   <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-                    {page.name}
+                    <Typography sx={{ textDecoration: page.isActive }}>
+                      {page.name}
+                    </Typography>
                   </Button>
                 </NextLink>
               ) : null
