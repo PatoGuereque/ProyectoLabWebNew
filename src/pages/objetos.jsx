@@ -163,7 +163,7 @@ const ObjetosEncontrados = () => {
 
   useEffect(() => {
     getNumberPages(numObjectsTotal);
-  }, [objects, mappedObjects]);
+  }, [objects, mappedObjects, numObjectsTotal]);
 
   return (
     <>
