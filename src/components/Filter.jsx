@@ -1,77 +1,46 @@
 import React from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
 
-// <Grid container spacing={2}>
-// {selectFilter}
-// {selectFilter}
-// </Grid>
-const Filter = () => {
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-
-  const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-  ];
-
-  const [personName, setPersonName] = React.useState([]);
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value
-    );
-  };
-
+const Filter = ({ results, setResults }) => {
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <Stack spacing={3} sx={{ width: 300 }}>
+      <Autocomplete
+        multiple
+        id="tags-standard"
+        options={categories}
+        getOptionLabel={(option) => option.title}
+        onChange={(event, value) => {
+          setResults(value);
+        }}
+        defaultValue={[]}
+        renderInput={(params) => (
+          <TextField {...params} label="Search..." placeholder="Keywords" />
+        )}
+      />
+    </Stack>
   );
 };
+
+const categories = [
+  { title: 'Aulas 1', type: 'ubicacion' },
+  { title: 'Aulas 2', type: 'ubicacion' },
+  { title: 'Aulas 3', type: 'ubicacion' },
+  { title: 'Aulas 4', type: 'ubicacion' },
+  { title: 'Aulas 6', type: 'ubicacion' },
+  { title: 'Aulas 7', type: 'ubicacion' },
+  { title: 'Biblio', type: 'ubicacion' },
+  { title: 'Centrales', type: 'ubicacion' },
+  { title: 'Jubileo', type: 'ubicacion' },
+  { title: 'Rectoría', type: 'ubicacion' },
+  { title: 'Audífonos', type: 'objeto' },
+  { title: 'Cartera', type: 'objeto' },
+  { title: 'Computadora', type: 'objeto' },
+  { title: 'Llaves', type: 'objeto' },
+  { title: 'Mochila', type: 'objeto' },
+  { title: 'Teléfono', type: 'objeto' },
+  { title: 'Termo', type: 'objeto' },
+];
 
 export default Filter;

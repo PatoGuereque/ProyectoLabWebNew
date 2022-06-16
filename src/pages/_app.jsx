@@ -7,10 +7,13 @@ import { CacheProvider } from '@emotion/react';
 import { SessionProvider } from 'next-auth/react';
 import createEmotionCache from '../helpers/createEmotionCache';
 import { ObjectContextProvider } from '../context/objects-context';
+import { PlaceContextProvider } from '../context/places-context';
+
 import PageAppBar from '../components/Appbar';
 import { useSession, signIn } from 'next-auth/react';
 import NextNProgress from 'nextjs-progressbar';
 import './404.css';
+import { CategoryContextProvider } from '../context/categories-context';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -50,21 +53,25 @@ export default function App(props) {
 
       <SessionProvider session={session}>
         <ObjectContextProvider>
-          <ThemeProvider theme={darkTheme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <PageAppBar />
-            <main>
-              <NextNProgress />
-              {Component.auth ? (
-                <Auth>
-                  <Component {...pageProps} />
-                </Auth>
-              ) : (
-                <Component {...pageProps} />
-              )}
-            </main>
-          </ThemeProvider>
+          <PlaceContextProvider>
+            <CategoryContextProvider>
+              <ThemeProvider theme={darkTheme}>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <CssBaseline />
+                <PageAppBar />
+                <main>
+                  <NextNProgress />
+                  {Component.auth ? (
+                    <Auth>
+                      <Component {...pageProps} />
+                    </Auth>
+                  ) : (
+                    <Component {...pageProps} />
+                  )}
+                </main>
+              </ThemeProvider>
+            </CategoryContextProvider>
+          </PlaceContextProvider>
         </ObjectContextProvider>
       </SessionProvider>
     </CacheProvider>
