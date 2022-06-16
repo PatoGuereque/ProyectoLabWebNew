@@ -40,7 +40,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const offset = (page, pageSize = 8) => {
+const defaultPageSize = 9;
+
+const offset = (page, pageSize = defaultPageSize) => {
   let inferiorLimit = (page - 1) * pageSize;
   let superiorLimit = inferiorLimit + pageSize;
   return [inferiorLimit, superiorLimit];
@@ -58,11 +60,11 @@ const ObjetosEncontrados = () => {
   //Pagination Objects
   const [page, setPage] = useState(1);
   const [numberPages, setNumberPages] = useState(10);
-  const getNumberPages = (objects, pageSize = 8) => {
+  const getNumberPages = (objects, pageSize = defaultPageSize) => {
     const numObjects = objects.length;
     setNumberPages(Math.ceil(numObjects / pageSize));
   };
-  const [inferiorLimit, superiorLimit] = offset(page, 8);
+  const [inferiorLimit, superiorLimit] = offset(page, defaultPageSize);
 
   //Modal Objects
   const [modalObject, setModalObject] = useState(undefined);
