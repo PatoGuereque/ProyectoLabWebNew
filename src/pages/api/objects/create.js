@@ -5,11 +5,12 @@ import { validate } from '../../../middlewares/validator';
 
 const handler = async (req, res) => {
   const session = req.session;
-  const { category, dateFound, imageBase64, location } = req.body;
+  const { category, dateFound, imageBase64, location, comments } = req.body;
 
   await prisma.foundObject.create({
     data: {
       dateFound,
+      comments,
       image: imageBase64,
       location: {
         connect: {
@@ -36,6 +37,7 @@ const validator = validate(handler, [
   check('location').isInt().notEmpty(),
   check('dateFound').isISO8601(),
   check('imageBase64').isString().notEmpty(),
+  check('comments').isString().optional(),
 ]);
 
 export default authRequired(validator);

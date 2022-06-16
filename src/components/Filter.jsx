@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Chip from '@mui/material/Chip';
+import { React, useState, useEffect } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
@@ -61,7 +60,6 @@ const Filter = ({ results, setResults }) => {
           // option ?.title
         }}
         onChange={(event, value) => {
-          //console.log(value)
           setResults(value);
 
           let categoriesLeft = [];

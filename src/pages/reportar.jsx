@@ -88,7 +88,7 @@ const userSchema = object({
   campus: number().required(),
   category: number().required(),
   location: number().required(),
-  comments: string().required(),
+  comments: string().optional(),
 });
 
 const schemaResolver = (data) => {
