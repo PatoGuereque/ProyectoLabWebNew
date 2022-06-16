@@ -109,7 +109,6 @@ const ObjetosEncontrados = () => {
       }
       let cont = 0;
       results.forEach((result) => {
-        console.log('s', result, obj);
         if (
           obj.category.name == result?.title ||
           obj.location.name == result?.title

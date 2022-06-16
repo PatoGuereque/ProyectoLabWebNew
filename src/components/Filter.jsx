@@ -9,16 +9,39 @@ const Filter = ({ results, setResults }) => {
   //const { objects, deactivateObject } = useObjectContext();
   // const [results, setResults] = useState([]);
 
+  const [categoriesFiltered, setCategoriesFiltered] = useState(categories);
+
   return (
     <Stack spacing={3} sx={{ width: 300 }}>
       <Autocomplete
         multiple
         id="tags-standard"
-        options={categories}
-        getOptionLabel={(option) => option.title}
+        options={categoriesFiltered}
+        getOptionLabel={(option) => {
+          if (option) {
+            return option?.title;
+          } else {
+            return 'sksk';
+          }
+          // option ?.title
+        }}
         onChange={(event, value) => {
           //console.log(value)
           setResults(value);
+
+          let categoriesLeft = [];
+          categories.forEach((category) => {
+            let cont = 0;
+            value.forEach((element) => {
+              if (element?.type == category?.type) {
+                cont++;
+              }
+            });
+            if (cont == 0) {
+              categoriesLeft.push(category);
+            }
+          });
+          setCategoriesFiltered(categoriesLeft);
         }}
         defaultValue={[]}
         renderInput={(params) => (
