@@ -17,6 +17,7 @@ import NextLink from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 var currPage = 0;
 
@@ -264,6 +265,16 @@ const PageAppBar = () => {
                   </MenuItem>
 
                   <Divider />
+
+                  {session.user.roles === 'admin' ? (
+                    <MenuItem onClick={() => console.log('it works!')}>
+                      <AdminPanelSettingsIcon></AdminPanelSettingsIcon>
+                      Admin Panel
+                    </MenuItem>
+                  ) : null}
+
+                  {session.user.roles === 'admin' ? <Divider /> : null}
+
                   <MenuItem onClick={signOut}>
                     <ListItemIcon>
                       <Logout fontSize="small" />
