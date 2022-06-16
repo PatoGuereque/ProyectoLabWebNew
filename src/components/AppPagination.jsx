@@ -2,9 +2,13 @@ import React from 'react';
 import { Pagination } from '@mui/material';
 
 const AppPagination = ({ setPage, pageNumber }) => {
-  const handleChange = (page) => {
+  const handleChange = (event, page) => {
     setPage(page);
     window.scroll(0, 0);
+  };
+
+  const onChange = (event, value) => {
+    console.log(event, value);
   };
 
   return (
@@ -26,7 +30,7 @@ const AppPagination = ({ setPage, pageNumber }) => {
         }}
       >
         <Pagination
-          onChange={(e) => handleChange(e.target.textContent)}
+          onChange={handleChange} //(e) => handleChange(e.target.textContent)}
           color="primary"
           style={{
             display: 'flex',
