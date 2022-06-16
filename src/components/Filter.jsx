@@ -1,46 +1,66 @@
 import React from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  Typography,
+} from '@mui/material';
+import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 
-const Filter = ({ results, setResults }) => {
+const Filter = ({ title, options, checked, setChecked, sx }) => {
   return (
-    <Stack spacing={3} sx={{ width: 300 }}>
-      <Autocomplete
-        multiple
-        id="tags-standard"
-        options={categories}
-        getOptionLabel={(option) => option.title}
-        onChange={(event, value) => {
-          setResults(value);
-        }}
-        defaultValue={[]}
-        renderInput={(params) => (
-          <TextField {...params} label="Search..." placeholder="Keywords" />
-        )}
-      />
-    </Stack>
+    <Accordion sx={sx} defaultExpanded>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography>{title}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <FormControl
+          component="fieldset"
+          variant="standard"
+          sx={{
+            maxHeight: 200,
+            width: '100%',
+            overflow: 'auto',
+          }}
+        >
+          <FormGroup
+            sx={{
+              flexWrap: 'nowrap',
+            }}
+          >
+            {options
+              ?.sort(({ name: name1 }, { name: name2 }) =>
+                name1.localeCompare(name2)
+              )
+              .map(({ name }) => (
+                <FormControlLabel
+                  key={name}
+                  control={
+                    <Checkbox
+                      checked={checked[name] === true}
+                      onChange={() => {
+                        const newState = { ...checked };
+                        newState[name] = checked[name] !== true;
+                        if (newState[name] !== true) {
+                          delete newState[name];
+                        }
+                        setChecked(newState);
+                      }}
+                      name={name}
+                    />
+                  }
+                  label={name}
+                />
+              ))}
+          </FormGroup>
+        </FormControl>
+      </AccordionDetails>
+    </Accordion>
   );
 };
-
-const categories = [
-  { title: 'Aulas 1', type: 'ubicacion' },
-  { title: 'Aulas 2', type: 'ubicacion' },
-  { title: 'Aulas 3', type: 'ubicacion' },
-  { title: 'Aulas 4', type: 'ubicacion' },
-  { title: 'Aulas 6', type: 'ubicacion' },
-  { title: 'Aulas 7', type: 'ubicacion' },
-  { title: 'Biblio', type: 'ubicacion' },
-  { title: 'Centrales', type: 'ubicacion' },
-  { title: 'Jubileo', type: 'ubicacion' },
-  { title: 'Rectoría', type: 'ubicacion' },
-  { title: 'Audífonos', type: 'objeto' },
-  { title: 'Cartera', type: 'objeto' },
-  { title: 'Computadora', type: 'objeto' },
-  { title: 'Llaves', type: 'objeto' },
-  { title: 'Mochila', type: 'objeto' },
-  { title: 'Teléfono', type: 'objeto' },
-  { title: 'Termo', type: 'objeto' },
-];
 
 export default Filter;

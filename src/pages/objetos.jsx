@@ -6,8 +6,15 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Alert from '@mui/material/Alert';
-import { CardActionArea, Chip } from '@mui/material';
+import {
+  AppBar,
+  CardActionArea,
+  Chip,
+  Container,
+  IconButton,
+  Stack,
+  Toolbar,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
@@ -18,9 +25,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import {
+  Close as CloseIcon,
+  FilterList as FilterIcon,
+} from '@mui/icons-material';
 import { useObjectContext } from '../context/objects-context';
 import AppPagination from '../components/AppPagination';
 import Filter from '../components/Filter';
+import { usePlaceContext } from '../context/places-context';
+import { useCategoryContext } from '../context/categories-context';
 
 //Transition Animation Function
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -35,7 +48,12 @@ const offset = (page, pageSize = 8) => {
 
 const ObjetosEncontrados = () => {
   const { objects, deactivateObject } = useObjectContext();
-  const [showAlert, editAlert] = useState(false);
+
+  // Filter
+  const { places } = usePlaceContext();
+  const { categories } = useCategoryContext();
+  const [locationFilter, setLocationFilter] = useState({});
+  const [categoryFilter, setCategoryFilter] = useState({});
 
   //Pagination Objects
   const [page, setPage] = useState(1);
@@ -44,8 +62,6 @@ const ObjetosEncontrados = () => {
     const numObjects = objects.length;
     setNumberPages(Math.ceil(numObjects / pageSize));
   };
-
-  const [results, setResults] = useState([]);
   const [inferiorLimit, superiorLimit] = offset(page, 8);
 
   //Modal Objects
@@ -59,9 +75,14 @@ const ObjetosEncontrados = () => {
   };
   const handleClose = () => setOpen(false);
 
+  //Mobile Filter Objects
+  const [mobileFilterOpen, setMobileFilterOpen] = React.useState(false);
+
   //Reclaim Function
-  const reclama = () =>
-    user ? deactivateObject({ id: object._id }) : editAlert(true);
+  const reclama = () => {
+    // TODO: Fix
+    //deactivateObject({ id: object._id })
+  };
 
   //Card Styles
   const CustomizedCard = styled(Card)`
@@ -70,6 +91,7 @@ const ObjetosEncontrados = () => {
       transform: scale(1.025);
     }
   `;
+
   let theme = createTheme();
   theme = responsiveFontSizes(theme);
   theme.typography.h3 = {
@@ -82,34 +104,21 @@ const ObjetosEncontrados = () => {
     },
   };
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
-
   //Map Of Objects
   const mappedObjects = objects
     .filter((obj) => {
-      if (!results || results.length === 0) {
+      if (Object.keys(locationFilter).length === 0) {
         return true;
       }
-      let cont = 0;
-      results.forEach((result) => {
-        if (
-          obj.category.name == result?.title ||
-          obj.location.name == result?.title
-        ) {
-          cont += 1;
-        }
-      }, []);
-      return cont == results.length;
+
+      return locationFilter[obj.location.name] === true;
+    })
+    .filter((obj) => {
+      if (Object.keys(categoryFilter).length === 0) {
+        return true;
+      }
+
+      return categoryFilter[obj.category.name] === true;
     })
     .slice(inferiorLimit, superiorLimit)
     .map((object) => {
@@ -117,11 +126,14 @@ const ObjetosEncontrados = () => {
         id,
         image,
         category: { name: categoryName },
-        location: { name: locationName },
+        location: {
+          name: locationName,
+          campus: { name: campusName },
+        },
         status,
       } = object;
       return (
-        <Grid item xs={6} md={3} key={id}>
+        <Grid item xs={6} md={6} lg={4} xl={3} key={id}>
           <CustomizedCard variant="outlined" sx={{ maxWidth: 345 }}>
             <CardActionArea onClick={() => setModalObject(object)}>
               <CardMedia component="img" height="180" src={image} />
@@ -129,22 +141,53 @@ const ObjetosEncontrados = () => {
                 <Typography gutterBottom variant="h5" component="div">
                   {categoryName}
                 </Typography>
-                <Typography gutterBottom variant="h6" component="div">
-                  {locationName}
+                <Typography variant="body2" color="text.secondary">
+                  Campus: {campusName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Ubicación: {locationName}
                 </Typography>
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" onClick={handleOpen}>
-                RECLAMAR
-              </Button>
-              {status == 'UNCLAIMED' ? (
-                <Chip label="Activo" color="primary" />
-              ) : status == 'CLAIMED' ? (
-                <Chip label="Inactivo" color="warning" />
-              ) : (
-                <Chip label="En revision" color="success" />
-              )}
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                flexWrap="wrap"
+                flex="auto"
+              >
+                {status == 'UNCLAIMED' ? (
+                  <Chip
+                    label="Activo"
+                    color="primary"
+                    variant="outlined"
+                    sx={{ mt: 1 }}
+                  />
+                ) : status == 'CLAIMED' ? (
+                  <Chip
+                    label="Inactivo"
+                    color="warning"
+                    variant="outlined"
+                    sx={{ mt: 1 }}
+                  />
+                ) : (
+                  <Chip
+                    label="En revision"
+                    color="success"
+                    variant="outlined"
+                    sx={{ mt: 1 }}
+                  />
+                )}
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleOpen}
+                  sx={{ mt: 1 }}
+                >
+                  RECLAMAR
+                </Button>
+              </Stack>
             </CardActions>
           </CustomizedCard>
         </Grid>
@@ -157,25 +200,33 @@ const ObjetosEncontrados = () => {
 
   return (
     <>
-      <Modal
+      <Dialog
         open={modalObject !== undefined}
         onClose={handleModalClose}
+        maxWidth="md"
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <DialogTitle>{modalObject?.category.name}</DialogTitle>
+        <Box
+          sx={{
+            px: 2,
+          }}
+        >
+          <CardMedia component="img" height="250" src={modalObject?.image} />
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Localizado en: {modalObject?.location.campus.name},{' '}
             {modalObject?.location.name}
           </Typography>
-          <CardMedia component="img" height="180" src={modalObject?.image} />
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Comentarios: {modalObject?.comments}
           </Typography>
-          <br />
-          <Button onClick={handleModalClose}>Cerrar</Button>
         </Box>
-      </Modal>
+
+        <DialogActions>
+          <Button onClick={handleModalClose}>Cerrar</Button>
+        </DialogActions>
+      </Dialog>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -201,25 +252,110 @@ const ObjetosEncontrados = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <div style={{ margin: 30 }}>
-        {showAlert ? (
-          <Alert severity="error" style={{ margin: 20 }}>
-            Tienes que iniciar sesión para reportar un objeto
-          </Alert>
-        ) : null}
+      <Dialog
+        fullScreen
+        open={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => setMobileFilterOpen(false)}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Filtros
+            </Typography>
+            <Button
+              autoFocus
+              color="inherit"
+              onClick={() => setMobileFilterOpen(false)}
+            >
+              save
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <Filter
+          title={'Categorías'}
+          options={categories}
+          checked={categoryFilter}
+          setChecked={setCategoryFilter}
+          sx={{
+            mb: 2,
+          }}
+        />
 
-        <Grid container spacing={2}>
-          <Filter results={results} setResults={setResults} />
+        <Filter
+          title={'Ubicaciones'}
+          options={places}
+          checked={locationFilter}
+          setChecked={setLocationFilter}
+        />
+      </Dialog>
+      <Container
+        sx={{
+          display: {
+            xs: 'flex',
+            md: 'none',
+          },
+          pt: 2,
+          flexDirection: 'column-reverse',
+        }}
+      >
+        <Button
+          startIcon={<FilterIcon />}
+          variant="contained"
+          onClick={() => setMobileFilterOpen(true)}
+        >
+          Filtrar
+        </Button>
+      </Container>
+      <Grid container padding={4} spacing={2}>
+        <Grid
+          item
+          md={2}
+          xs={12}
+          sx={{
+            display: {
+              xs: 'none',
+              md: 'block',
+            },
+          }}
+        >
+          <Typography sx={{ flex: 1, mb: 2 }} variant="h6" component="div">
+            Filtros
+          </Typography>
+          <Filter
+            title={'Categorías'}
+            options={categories}
+            checked={categoryFilter}
+            setChecked={setCategoryFilter}
+            sx={{
+              mb: 2,
+            }}
+          />
+
+          <Filter
+            title={'Ubicaciones'}
+            options={places}
+            checked={locationFilter}
+            setChecked={setLocationFilter}
+          />
         </Grid>
-        <br />
+        <Grid item md={10}>
+          <Grid container spacing={2}>
+            {mappedObjects}
+          </Grid>
 
-        <Grid container spacing={2}>
-          {mappedObjects}
+          <br />
         </Grid>
-
-        <br />
-        <AppPagination setPage={setPage} pageNumber={numberPages} />
-      </div>
+      </Grid>
+      <AppPagination setPage={setPage} pageNumber={numberPages} />
     </>
   );
 };
