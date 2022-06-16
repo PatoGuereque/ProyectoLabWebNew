@@ -48,6 +48,7 @@ const ObjetosEncontrados = () => {
     let superiorLimit = inferiorLimit + pageSize;
     return [inferiorLimit, superiorLimit];
   };
+  const [results, setResults] = useState([]);
 
   const [inferiorLimit, superiorLimit] = offset(page, 8);
   //Modal Objects
@@ -102,6 +103,23 @@ const ObjetosEncontrados = () => {
 
   //Map Of Objects
   const mappedObjects = objects
+    .filter((obj) => {
+      if (!results || results.length === 0) {
+        return true;
+      }
+      let cont = 0;
+      results.forEach((result) => {
+        console.log('s', result, obj);
+        if (
+          obj.category.name == result?.title ||
+          obj.location.name == result?.title
+        ) {
+          cont += 1;
+        }
+      }, []);
+      return cont == results.length;
+      //return obj.category.name == results[0]?.title && obj.location.name == results[1]?.title
+    })
     .slice(inferiorLimit, superiorLimit)
     .map(
       ({
@@ -201,7 +219,7 @@ const ObjetosEncontrados = () => {
           ) : null}
 
           <Grid container spacing={2}>
-            <Filter />
+            <Filter results={results} setResults={setResults} />
           </Grid>
           <br />
 

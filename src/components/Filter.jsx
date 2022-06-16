@@ -5,9 +5,9 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { useObjectContext } from '../context/objects-context';
 
-const Filter = () => {
+const Filter = ({ results, setResults }) => {
   //const { objects, deactivateObject } = useObjectContext();
-  const [results, setResults] = useState([]);
+  // const [results, setResults] = useState([]);
 
   return (
     <Stack spacing={3} sx={{ width: 300 }}>
@@ -16,6 +16,10 @@ const Filter = () => {
         id="tags-standard"
         options={categories}
         getOptionLabel={(option) => option.title}
+        onChange={(event, value) => {
+          //console.log(value)
+          setResults(value);
+        }}
         defaultValue={[]}
         renderInput={(params) => (
           <TextField {...params} label="Search..." placeholder="Keywords" />
