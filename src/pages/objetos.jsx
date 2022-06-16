@@ -14,10 +14,10 @@ import {
   IconButton,
   Stack,
   Toolbar,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { createTheme, responsiveFontSizes } from '@mui/material/styles';
-import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -60,11 +60,26 @@ const ObjetosEncontrados = () => {
   //Pagination Objects
   const [page, setPage] = useState(1);
   const [numberPages, setNumberPages] = useState(10);
-  const getNumberPages = (objects, pageSize = defaultPageSize) => {
+  const getNumberPages = (objects, pageSize) => {
     const numObjects = objects.length;
     setNumberPages(Math.ceil(numObjects / pageSize));
   };
-  const [inferiorLimit, superiorLimit] = offset(page, defaultPageSize);
+
+  const theme = useTheme();
+  const isXl = useMediaQuery(theme.breakpoints.up('xl'));
+  const isLg = useMediaQuery(theme.breakpoints.up('lg'));
+  const isMd = useMediaQuery(theme.breakpoints.up('md'));
+  let pageSize = 9;
+  if (isXl) {
+    pageSize = 12;
+  } else if (isLg) {
+    pageSize = 9;
+  } else if (isMd) {
+    pageSize = 6;
+  } else {
+    pageSize = 4;
+  }
+  const [inferiorLimit, superiorLimit] = offset(page, pageSize);
 
   //Modal Objects
   const [modalObject, setModalObject] = useState(undefined);
@@ -93,18 +108,6 @@ const ObjetosEncontrados = () => {
       transform: scale(1.025);
     }
   `;
-
-  let theme = createTheme();
-  theme = responsiveFontSizes(theme);
-  theme.typography.h3 = {
-    fontSize: '1.2rem',
-    '@media (min-width:600px)': {
-      fontSize: '1.5rem',
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: '2.4rem',
-    },
-  };
 
   const filteredObjects = objects
     .filter((obj) => {
@@ -199,8 +202,8 @@ const ObjetosEncontrados = () => {
     });
 
   useEffect(() => {
-    getNumberPages(filteredObjects);
-  }, [filteredObjects]);
+    getNumberPages(filteredObjects, pageSize);
+  }, [filteredObjects, pageSize]);
 
   return (
     <>
