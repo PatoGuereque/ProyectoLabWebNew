@@ -266,6 +266,8 @@ const PageAppBar = () => {
 
                   <Divider />
 
+                  {console.log(session.user.roles)}
+
                   {session.user.roles === 'admin' ? (
                     <MenuItem onClick={() => console.log('it works!')}>
                       <AdminPanelSettingsIcon></AdminPanelSettingsIcon>
