@@ -47,6 +47,13 @@ const PageAppBar = () => {
           isActive: 'none',
         }
       : {},
+    session && session.user.roles == 'admin'
+      ? {
+          name: 'Admin Panel',
+          route: '/admin',
+          isActive: 'none',
+        }
+      : {},
     {
       name: 'FAQ',
       route: '/faq',
@@ -88,6 +95,10 @@ const PageAppBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const adminPanel = () => {
+    return <NextLink href="/admin"></NextLink>;
   };
 
   return (
@@ -269,7 +280,7 @@ const PageAppBar = () => {
                   {console.log(session.user.roles)}
 
                   {session.user.roles === 'admin' ? (
-                    <MenuItem onClick={() => console.log('it works!')}>
+                    <MenuItem onClick={() => adminPanel()}>
                       <AdminPanelSettingsIcon></AdminPanelSettingsIcon>
                       Admin Panel
                     </MenuItem>
