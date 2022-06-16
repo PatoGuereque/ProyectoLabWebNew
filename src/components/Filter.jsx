@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import Chip from '@mui/material/Chip';
+import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import { useObjectContext } from '../context/objects-context';
 
 const Filter = ({ results, setResults }) => {
-  //const { objects, deactivateObject } = useObjectContext();
-  // const [results, setResults] = useState([]);
-
   return (
     <Stack spacing={3} sx={{ width: 300 }}>
       <Autocomplete
@@ -17,7 +12,6 @@ const Filter = ({ results, setResults }) => {
         options={categories}
         getOptionLabel={(option) => option.title}
         onChange={(event, value) => {
-          //console.log(value)
           setResults(value);
         }}
         defaultValue={[]}
