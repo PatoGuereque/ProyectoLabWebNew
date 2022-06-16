@@ -56,3 +56,10 @@ export const deactivateObject = async (data, dispatch) => {
   await axios.post(`/api/objects/desactivar/${data.id}`);
   fetchObjects(dispatch);
 };
+
+export const softDeleteObject = async (data, dispatch) => {
+  await axios.put(`/api/objects/${data.id}`, {
+    deleted: true,
+  });
+  fetchObjects(dispatch);
+};
