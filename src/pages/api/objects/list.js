@@ -1,7 +1,7 @@
-import handler, { authRequired } from '../../../middlewares/handler';
+import { authRequired } from '../../../middlewares/auth-required';
 import prisma from '../../../lib/prisma';
 
-export default handler.use(authRequired).get(async (req, res) => {
+const handler = async (_req, res) => {
   const objects = await prisma.foundObject.findMany({
     include: {
       category: true,
@@ -16,4 +16,6 @@ export default handler.use(authRequired).get(async (req, res) => {
   return res.status(200).json({
     objects,
   });
-});
+};
+
+export default authRequired(handler);
