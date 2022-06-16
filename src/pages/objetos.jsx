@@ -104,8 +104,7 @@ const ObjetosEncontrados = () => {
     },
   };
 
-  //Map Of Objects
-  const mappedObjects = objects
+  const filteredObjects = objects
     .filter((obj) => {
       if (Object.keys(locationFilter).length === 0) {
         return true;
@@ -119,7 +118,10 @@ const ObjetosEncontrados = () => {
       }
 
       return categoryFilter[obj.category.name] === true;
-    })
+    });
+
+  //Map Of Objects
+  const mappedObjects = filteredObjects
     .slice(inferiorLimit, superiorLimit)
     .map((object) => {
       const {
@@ -195,8 +197,8 @@ const ObjetosEncontrados = () => {
     });
 
   useEffect(() => {
-    getNumberPages(objects);
-  }, [objects]);
+    getNumberPages(filteredObjects);
+  }, [filteredObjects]);
 
   return (
     <>
