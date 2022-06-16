@@ -102,23 +102,24 @@ const ObjetosEncontrados = () => {
   };
 
   //Map Of Objects
-  const mappedObjects = objects
-    .filter((obj) => {
-      if (!results || results.length === 0) {
-        return true;
+  const numObjectsTotal = objects.filter((obj) => {
+    if (!results || results.length === 0) {
+      return true;
+    }
+    let cont = 0;
+    results.forEach((result) => {
+      if (
+        obj.category.name == result?.title ||
+        obj.location.name == result?.title
+      ) {
+        cont += 1;
       }
-      let cont = 0;
-      results.forEach((result) => {
-        if (
-          obj.category.name == result?.title ||
-          obj.location.name == result?.title
-        ) {
-          cont += 1;
-        }
-      }, []);
-      return cont == results.length;
-      //return obj.category.name == results[0]?.title && obj.location.name == results[1]?.title
-    })
+    }, []);
+    return cont == results.length;
+    //return obj.category.name == results[0]?.title && obj.location.name == results[1]?.title
+  });
+
+  const mappedObjects = numObjectsTotal
     .slice(inferiorLimit, superiorLimit)
     .map(
       ({
@@ -161,8 +162,8 @@ const ObjetosEncontrados = () => {
     );
 
   useEffect(() => {
-    getNumberPages(objects);
-  }, [objects]);
+    getNumberPages(numObjectsTotal);
+  }, [objects, mappedObjects]);
 
   return (
     <>
