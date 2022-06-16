@@ -4,12 +4,49 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import { useObjectContext } from '../context/objects-context';
+import { useCategoryContext } from '../context/categories-context';
+import { usePlaceContext } from '../context/places-context';
 
 const Filter = ({ results, setResults }) => {
   //const { objects, deactivateObject } = useObjectContext();
   // const [results, setResults] = useState([]);
+  const { categories } = useCategoryContext();
+  const { places } = usePlaceContext();
 
-  const [categoriesFiltered, setCategoriesFiltered] = useState(categories);
+  const [categoriesFiltered, setCategoriesFiltered] = useState(categoriesList);
+
+  useEffect(() => {
+    console.log(categories);
+    console.log(places);
+
+    let categoriesFormatted =
+      categories &&
+      categories.map((category) => {
+        return {
+          title: category.name,
+          type: 'objeto',
+        };
+      });
+
+    let placesFormatted =
+      places &&
+      places.map((place) => {
+        return {
+          title: place.name,
+          type: 'ubicacion',
+        };
+      });
+
+    console.log(categoriesFormatted);
+    console.log(placesFormatted);
+
+    let mergedList =
+      placesFormatted &&
+      categoriesFormatted &&
+      categoriesFormatted.concat(placesFormatted);
+    categoriesList = mergedList;
+    setCategoriesFiltered(categoriesList);
+  }, [categories, places]);
 
   return (
     <Stack spacing={3} sx={{ width: 300 }}>
@@ -20,8 +57,6 @@ const Filter = ({ results, setResults }) => {
         getOptionLabel={(option) => {
           if (option) {
             return option?.title;
-          } else {
-            return 'sksk';
           }
           // option ?.title
         }}
@@ -30,7 +65,7 @@ const Filter = ({ results, setResults }) => {
           setResults(value);
 
           let categoriesLeft = [];
-          categories.forEach((category) => {
+          categoriesList.forEach((category) => {
             let cont = 0;
             value.forEach((element) => {
               if (element?.type == category?.type) {
@@ -52,8 +87,8 @@ const Filter = ({ results, setResults }) => {
   );
 };
 
-const categories = [
-  { title: 'Aulas 1', type: 'ubicacion' },
+const categoriesList = [];
+/* { title: 'Aulas 1', type: 'ubicacion' },
   { title: 'Aulas 2', type: 'ubicacion' },
   { title: 'Aulas 3', type: 'ubicacion' },
   { title: 'Aulas 4', type: 'ubicacion' },
@@ -70,6 +105,6 @@ const categories = [
   { title: 'Mochila', type: 'objeto' },
   { title: 'Teléfono', type: 'objeto' },
   { title: 'Termo', type: 'objeto' },
-];
+];*/
 
 export default Filter;
