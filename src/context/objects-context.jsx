@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, createContext } from 'react';
 import { useContext } from 'react';
 import {
   clearPostObject,
-  deactivateObject,
+  reclaimObject,
   fetchObjects,
   postObject,
   reducer,
@@ -35,7 +35,7 @@ export const useObjectContext = () => {
   return {
     fetchObjects: () => fetchObjects(dispatch),
     postObject: (data) => postObject(data, dispatch),
-    deactivateObject: (data) => deactivateObject(data, dispatch),
+    reclaimObject: (data) => reclaimObject(data, dispatch),
     clearPostResponse: () => clearPostObject(dispatch),
 
     objects: state.objects,

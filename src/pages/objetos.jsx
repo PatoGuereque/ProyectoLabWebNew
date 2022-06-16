@@ -49,7 +49,7 @@ const offset = (page, pageSize = defaultPageSize) => {
 };
 
 const ObjetosEncontrados = () => {
-  const { objects, deactivateObject } = useObjectContext();
+  const { objects, reclaimObject } = useObjectContext();
 
   // Filter
   const { places } = usePlaceContext();
@@ -86,19 +86,15 @@ const ObjetosEncontrados = () => {
   const handleModalClose = () => setModalObject(undefined);
 
   //Dialog Objects
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
+  const [reclaimModalObject, setReclaimModalObject] = React.useState(undefined);
+  const handleClose = () => setReclaimModalObject(undefined);
 
   //Mobile Filter Objects
   const [mobileFilterOpen, setMobileFilterOpen] = React.useState(false);
 
   //Reclaim Function
-  const reclama = () => {
-    // TODO: Fix
-    //deactivateObject({ id: object._id })
+  const reclama = (id) => {
+    reclaimObject({ id });
   };
 
   //Card Styles
@@ -189,7 +185,7 @@ const ObjetosEncontrados = () => {
                 <Button
                   size="small"
                   variant="contained"
-                  onClick={handleOpen}
+                  onClick={() => setReclaimModalObject(object)}
                   sx={{ mt: 1 }}
                 >
                   RECLAMAR
@@ -235,7 +231,7 @@ const ObjetosEncontrados = () => {
         </DialogActions>
       </Dialog>
       <Dialog
-        open={open}
+        open={reclaimModalObject !== undefined}
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
@@ -251,8 +247,9 @@ const ObjetosEncontrados = () => {
           <Button onClick={handleClose}>Cancelar</Button>
           <Button
             onClick={() => {
+              console.log(reclaimModalObject);
+              reclama(reclaimModalObject.id);
               handleClose();
-              reclama();
             }}
           >
             Reclamar
