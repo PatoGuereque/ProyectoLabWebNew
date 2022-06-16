@@ -247,7 +247,6 @@ const ObjetosEncontrados = () => {
           <Button onClick={handleClose}>Cancelar</Button>
           <Button
             onClick={() => {
-              console.log(reclaimModalObject);
               reclama(reclaimModalObject.id);
               handleClose();
             }}
