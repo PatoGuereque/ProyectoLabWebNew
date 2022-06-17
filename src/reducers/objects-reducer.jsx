@@ -5,6 +5,10 @@ const POST_RESPONSE = 'POST_RESPONSE';
 
 const fetchObjectsResponse = (data) => ({ type: FETCH_OBJECTS, payload: data });
 const postObjectResponse = (data) => ({ type: POST_RESPONSE, payload: data });
+const softDeleteObjectResponse = (data) => ({
+  type: POST_RESPONSE,
+  payload: data,
+});
 
 export const reducer = (state, action) => {
   switch (action.type) {
