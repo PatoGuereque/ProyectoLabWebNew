@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 
 const Admin = () => {
   const { data: session } = useSession();
+  const users = useUsersContext();
 
   if (!session || (session && session.user.roles != 'admin')) {
     return (
@@ -16,8 +17,6 @@ const Admin = () => {
       </Typography>
     );
   }
-
-  const users = useUsersContext();
 
   //const [ users ] = useState(useUsersContext());
   //console.log(users);
