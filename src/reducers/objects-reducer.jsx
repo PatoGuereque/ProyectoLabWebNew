@@ -56,8 +56,8 @@ export const clearPostObject = async (dispatch) => {
   dispatch(postObjectResponse(undefined));
 };
 
-export const deactivateObject = async (data, dispatch) => {
-  await axios.post(`/api/objects/desactivar/${data.id}`);
+export const reclaimObject = async (data, dispatch) => {
+  await axios.post(`/api/objects/reclaim/${data.id}`);
   fetchObjects(dispatch);
 };
 
