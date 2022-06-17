@@ -62,7 +62,7 @@ export const reclaimObject = async (data, dispatch) => {
 };
 
 export const softDeleteObject = async (data, dispatch) => {
-  await axios.put(`/api/objects/${data.id}`, {
+  await axios.put(`/api/objects/softdelete/${data.id}`, {
     deleted: true,
   });
   fetchObjects(dispatch);

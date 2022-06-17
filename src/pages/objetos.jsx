@@ -52,7 +52,7 @@ const offset = (page, pageSize = defaultPageSize) => {
 
 const ObjetosEncontrados = () => {
   const { data: session } = useSession();
-  const { objects, reclaimObject } = useObjectContext();
+  const { objects, reclaimObject, softDeleteObject } = useObjectContext();
 
   // Filter
   const { places } = usePlaceContext();
@@ -216,9 +216,10 @@ const ObjetosEncontrados = () => {
     const filteredOjectsState = objectsState.filter(
       (obj) => obj.id != object.id
     );
+    console.log(object);
 
     setObjectsState(filteredOjectsState);
-    softDeleteObject(object);
+    softDeleteObject({ id: object.id });
     //deactivateObject({ id: object._id })
   };
 
