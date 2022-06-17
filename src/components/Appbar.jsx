@@ -49,8 +49,8 @@ const PageAppBar = () => {
       : {},
     session && session.user.roles == 'admin'
       ? {
-          name: 'Admin Panel',
-          route: '/admin',
+          name: 'Reportes',
+          route: '/reportes',
           isActive: 'none',
         }
       : {},
@@ -98,7 +98,8 @@ const PageAppBar = () => {
   };
 
   const adminPanel = () => {
-    return <NextLink href="/admin"></NextLink>;
+    console.log('dddd');
+    window.location.href = '/admin';
   };
 
   return (
