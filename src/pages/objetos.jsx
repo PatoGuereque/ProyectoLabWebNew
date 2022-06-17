@@ -161,6 +161,7 @@ const ObjetosEncontrados = () => {
               <Stack
                 direction="row"
                 justifyContent="space-between"
+                alignItems="center"
                 flexWrap="wrap"
                 flex="auto"
               >
@@ -199,8 +200,9 @@ const ObjetosEncontrados = () => {
                 {session.user.roles == 'admin' ? (
                   <IconButton
                     aria-label="delete"
-                    size="large"
+                    size="medium"
                     onClick={() => deleteObject(object)}
+                    sx={{ mt: 1 }}
                   >
                     <DeleteIcon fontSize="inherit" />
                   </IconButton>
@@ -388,5 +390,7 @@ const ObjetosEncontrados = () => {
     </>
   );
 };
+
+ObjetosEncontrados.auth = true;
 
 export default ObjetosEncontrados;

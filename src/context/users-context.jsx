@@ -1,10 +1,6 @@
 import React, { useReducer, useEffect, createContext } from 'react';
 import { useContext } from 'react';
-import {
-  fetchUsers,
-  reducer,
-  fetchUsersResponse,
-} from '../reducers/users-reducer';
+import { fetchUsers, reducer } from '../reducers/users-reducer';
 
 export const UsersContext = createContext();
 
