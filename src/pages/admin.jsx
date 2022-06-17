@@ -17,16 +17,13 @@ const Admin = () => {
     );
   }
 
-  const getUsers = async () => {
-    const users = await useUsersContext();
-    return users;
-  };
+  const users = useUsersContext();
 
   //const [ users ] = useState(useUsersContext());
   //console.log(users);
 
   //const { objects } = useObjectContext();
-  let users = [
+  /*let users = [
     {
       id: 1,
       name: 'John Doe',
@@ -39,7 +36,7 @@ const Admin = () => {
       email: 'd',
       roles: 'admin',
     },
-  ];
+  ];*/
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
