@@ -1,5 +1,5 @@
-import { authRequired } from '../../../middlewares/auth-required';
 import prisma from '../../../lib/prisma';
+import { roleRequired } from '../../../middlewares/role-required';
 
 const handler = async (_req, res) => {
   const users = await prisma.user.findMany({});
@@ -9,4 +9,4 @@ const handler = async (_req, res) => {
   });
 };
 
-export default authRequired(handler);
+export default roleRequired('admin', handler);
