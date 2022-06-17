@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { Container, Box } from '@mui/material';
 import { useUsersContext } from '../context/users-context';
 import { useObjectContext } from '../context/objects-context';
 import { DataGrid } from '@mui/x-data-grid';
+import { useSession } from 'next-auth/react';
 
 const Admin = () => {
-  //const users = useUsersContext();
+  const { data: session } = useSession();
+
+  if (!session || (session && session.user.roles != 'admin')) {
+    return (
+      <Typography variant="h1">
+        You are not authorized to access this page
+      </Typography>
+    );
+  }
+
+  const getUsers = async () => {
+    const users = await useUsersContext();
+    return users;
+  };
+
+  //const [ users ] = useState(useUsersContext());
+  //console.log(users);
+
   //const { objects } = useObjectContext();
   let users = [
     {
