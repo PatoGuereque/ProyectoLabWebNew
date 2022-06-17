@@ -43,7 +43,7 @@ model User {
   email          String?       @unique
   emailVerified  DateTime?     @map("email_verified")
   image          String?
-  roles          String?
+  roles          String?       @default("user")
   accounts       Account[]
   sessions       Session[]
   foundObjects   FoundObject[] @relation("found")
@@ -102,6 +102,7 @@ model FoundObject {
   comments        String?
   status          Status   @default(UNCLAIMED)
   claimedById     String?  @map("claimed_user_id")
+  is_deleted       Boolean  @default(false)
 
   location      Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
   category      Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)

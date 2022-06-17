@@ -17,6 +17,7 @@ import NextLink from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 var currPage = 0;
 
@@ -43,6 +44,13 @@ const PageAppBar = () => {
       ? {
           name: 'Reportar Objetos',
           route: '/reportar',
+          isActive: 'none',
+        }
+      : {},
+    session && session.user.roles == 'admin'
+      ? {
+          name: 'Reportes',
+          route: '/reportes',
           isActive: 'none',
         }
       : {},
@@ -87,6 +95,11 @@ const PageAppBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const adminPanel = () => {
+    console.log('dddd');
+    window.location.href = '/admin';
   };
 
   return (
@@ -264,6 +277,18 @@ const PageAppBar = () => {
                   </MenuItem>
 
                   <Divider />
+
+                  {console.log(session.user.roles)}
+
+                  {session.user.roles === 'admin' ? (
+                    <MenuItem onClick={() => adminPanel()}>
+                      <AdminPanelSettingsIcon></AdminPanelSettingsIcon>
+                      Admin Panel
+                    </MenuItem>
+                  ) : null}
+
+                  {session.user.roles === 'admin' ? <Divider /> : null}
+
                   <MenuItem onClick={signOut}>
                     <ListItemIcon>
                       <Logout fontSize="small" />

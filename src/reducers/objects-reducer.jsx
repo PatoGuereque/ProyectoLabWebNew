@@ -5,6 +5,10 @@ const POST_RESPONSE = 'POST_RESPONSE';
 
 const fetchObjectsResponse = (data) => ({ type: FETCH_OBJECTS, payload: data });
 const postObjectResponse = (data) => ({ type: POST_RESPONSE, payload: data });
+const softDeleteObjectResponse = (data) => ({
+  type: POST_RESPONSE,
+  payload: data,
+});
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -54,5 +58,12 @@ export const clearPostObject = async (dispatch) => {
 
 export const reclaimObject = async (data, dispatch) => {
   await axios.post(`/api/objects/reclaim/${data.id}`);
+  fetchObjects(dispatch);
+};
+
+export const softDeleteObject = async (data, dispatch) => {
+  await axios.put(`/api/objects/softdelete/${data.id}`, {
+    deleted: true,
+  });
   fetchObjects(dispatch);
 };

@@ -4,16 +4,17 @@ import Head from 'next/head';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
+import { Alert, AlertTitle, Container } from '@mui/material';
 import { SessionProvider } from 'next-auth/react';
 import createEmotionCache from '../helpers/createEmotionCache';
 import { ObjectContextProvider } from '../context/objects-context';
 import { PlaceContextProvider } from '../context/places-context';
-
 import PageAppBar from '../components/Appbar';
 import { useSession, signIn } from 'next-auth/react';
 import NextNProgress from 'nextjs-progressbar';
 import './404.css';
 import { CategoryContextProvider } from '../context/categories-context';
+import { UsersContextProvider } from '../context/users-context';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -52,33 +53,35 @@ export default function App(props) {
       </Head>
 
       <SessionProvider session={session}>
-        <ObjectContextProvider>
-          <PlaceContextProvider>
-            <CategoryContextProvider>
-              <ThemeProvider theme={darkTheme}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                <CssBaseline />
-                <PageAppBar />
-                <main>
-                  <NextNProgress />
-                  {Component.auth ? (
-                    <Auth>
+        <UsersContextProvider>
+          <ObjectContextProvider>
+            <PlaceContextProvider>
+              <CategoryContextProvider>
+                <ThemeProvider theme={darkTheme}>
+                  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                  <CssBaseline />
+                  <PageAppBar />
+                  <main>
+                    <NextNProgress />
+                    {Component.auth ? (
+                      <Auth role={Component.auth?.role}>
+                        <Component {...pageProps} />
+                      </Auth>
+                    ) : (
                       <Component {...pageProps} />
-                    </Auth>
-                  ) : (
-                    <Component {...pageProps} />
-                  )}
-                </main>
-              </ThemeProvider>
-            </CategoryContextProvider>
-          </PlaceContextProvider>
-        </ObjectContextProvider>
+                    )}
+                  </main>
+                </ThemeProvider>
+              </CategoryContextProvider>
+            </PlaceContextProvider>
+          </ObjectContextProvider>
+        </UsersContextProvider>
       </SessionProvider>
     </CacheProvider>
   );
 }
 
-const Auth = ({ children }) => {
+const Auth = ({ children, role }) => {
   const { data: session, status } = useSession();
   const isUser = !!session?.user;
   React.useEffect(() => {
@@ -87,6 +90,16 @@ const Auth = ({ children }) => {
   }, [isUser, status]);
 
   if (isUser) {
+    if (role && session.user.roles != role) {
+      return (
+        <Container sx={{ mt: 4 }}>
+          <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            You are not authorized to access this page
+          </Alert>
+        </Container>
+      );
+    }
     return children;
   }
 

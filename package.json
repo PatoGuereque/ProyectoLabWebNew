@@ -10,6 +10,7 @@
     "@mui/icons-material": "^5.6.2",
     "@mui/lab": "^5.0.0-alpha.80",
     "@mui/material": "^5.6.3",
+    "@mui/x-data-grid": "^5.12.2",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "^3.14.0",
     "@testing-library/jest-dom": "^5.16.3",
@@ -23,6 +24,7 @@
     "nextjs-progressbar": "^0.0.14",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
+    "prisma": "^3.15.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.30.0",
@@ -64,8 +66,7 @@
     "http-proxy-middleware": "^2.0.6",
     "husky": "^8.0.1",
     "lint-staged": "^12.3.7",
-    "prettier": "^2.6.1",
-    "prisma": "^3.14.0"
+    "prettier": "^2.6.1"
   },
   "lint-staged": {
     "*.jsx": "prettier --write"

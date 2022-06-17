@@ -34,6 +34,8 @@ import AppPagination from '../components/AppPagination';
 import Filter from '../components/Filter';
 import { usePlaceContext } from '../context/places-context';
 import { useCategoryContext } from '../context/categories-context';
+import { useSession } from 'next-auth/react';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 //Transition Animation Function
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -49,7 +51,8 @@ const offset = (page, pageSize = defaultPageSize) => {
 };
 
 const ObjetosEncontrados = () => {
-  const { objects, reclaimObject } = useObjectContext();
+  const { data: session } = useSession();
+  const { objects, reclaimObject, softDeleteObject } = useObjectContext();
 
   // Filter
   const { places } = usePlaceContext();
@@ -60,8 +63,8 @@ const ObjetosEncontrados = () => {
   //Pagination Objects
   const [page, setPage] = useState(1);
   const [numberPages, setNumberPages] = useState(10);
-  const getNumberPages = (objects, pageSize) => {
-    const numObjects = objects.length;
+  const getNumberPages = (objectsState, pageSize) => {
+    const numObjects = objectsState.length;
     setNumberPages(Math.ceil(numObjects / pageSize));
   };
 
@@ -105,7 +108,9 @@ const ObjetosEncontrados = () => {
     }
   `;
 
-  const filteredObjects = objects
+  const [objectsState, setObjectsState] = useState(objects);
+
+  const filteredObjects = objectsState
     .filter((obj) => {
       if (Object.keys(locationFilter).length === 0) {
         return true;
@@ -156,6 +161,7 @@ const ObjetosEncontrados = () => {
               <Stack
                 direction="row"
                 justifyContent="space-between"
+                alignItems="center"
                 flexWrap="wrap"
                 flex="auto"
               >
@@ -190,12 +196,34 @@ const ObjetosEncontrados = () => {
                 >
                   RECLAMAR
                 </Button>
+
+                {session.user.roles == 'admin' ? (
+                  <IconButton
+                    aria-label="delete"
+                    size="medium"
+                    onClick={() => deleteObject(object)}
+                    sx={{ mt: 1 }}
+                  >
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                ) : null}
               </Stack>
             </CardActions>
           </CustomizedCard>
         </Grid>
       );
     });
+
+  const deleteObject = (object) => {
+    const filteredOjectsState = objectsState.filter(
+      (obj) => obj.id != object.id
+    );
+    console.log(object);
+
+    setObjectsState(filteredOjectsState);
+    softDeleteObject({ id: object.id });
+    //deactivateObject({ id: object._id })
+  };
 
   useEffect(() => {
     getNumberPages(filteredObjects, pageSize);
@@ -362,5 +390,7 @@ const ObjetosEncontrados = () => {
     </>
   );
 };
+
+ObjetosEncontrados.auth = true;
 
 export default ObjetosEncontrados;

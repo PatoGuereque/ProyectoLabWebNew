@@ -6,6 +6,7 @@ import {
   fetchObjects,
   postObject,
   reducer,
+  softDeleteObject,
 } from '../reducers/objects-reducer';
 
 export const ObjectContext = createContext();
@@ -37,8 +38,10 @@ export const useObjectContext = () => {
     postObject: (data) => postObject(data, dispatch),
     reclaimObject: (data) => reclaimObject(data, dispatch),
     clearPostResponse: () => clearPostObject(dispatch),
+    softDeleteObject: (data) => softDeleteObject(data, dispatch),
 
     objects: state.objects,
     postResponse: state.postResponse,
+    softDeleteObjectResponse: state.softDeleteObjectResponse,
   };
 };
