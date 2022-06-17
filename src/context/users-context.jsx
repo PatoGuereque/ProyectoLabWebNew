@@ -27,6 +27,7 @@ export const useUsersContext = () => {
 
   return {
     fetchUsers: () => fetchUsers(dispatch),
+    getUsers: (data) => getUsers(data, dispatch),
 
     users: state.users,
   };

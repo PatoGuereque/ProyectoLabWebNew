@@ -43,7 +43,7 @@ model User {
   email          String?       @unique
   emailVerified  DateTime?     @map("email_verified")
   image          String?
-  roles          String?
+  roles          String?       @default("user")
   accounts       Account[]
   sessions       Session[]
   foundObjects   FoundObject[] @relation("found")

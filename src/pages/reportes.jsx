@@ -17,6 +17,7 @@ import Grid from '@mui/material/Grid';
 
 const Reports = () => {
   const { data: session } = useSession();
+  const { users, fetchUsers, getUsers } = useUsersContext();
   const { objects } = useObjectContext();
   console.log(objects);
   const [modalObject, setModalObject] = useState(undefined);
@@ -29,6 +30,17 @@ const Reports = () => {
       </Typography>
     );
   }
+
+  const getUserMail = (id) => {
+    if (users) {
+      let mail = users.find((user) => user.id == id).email;
+      if (mail) {
+        return mail;
+      }
+      return '';
+    }
+    return '';
+  };
 
   const formatObjects = (objects) => {
     return objects.map((object) => {
@@ -86,10 +98,11 @@ const Reports = () => {
             Comentarios: {modalObject?.row.comments}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Creador de publicacion: {modalObject?.row.user_reported}
+            Creador de publicacion:{' '}
+            {getUserMail(modalObject?.row.user_reported)}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Dueno del objeto: {modalObject?.row.user_claimed}
+            Dueno del objeto: {getUserMail(modalObject?.row.user_claimed)}
           </Typography>
         </Box>
 

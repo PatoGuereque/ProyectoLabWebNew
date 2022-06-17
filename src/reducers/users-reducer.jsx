@@ -23,3 +23,12 @@ export const fetchUsers = (dispatch) => {
     })
     .catch(() => {});
 };
+
+export const getUsers = (id) => (dispatch) => {
+  axios
+    .get(`/api/users/contact/${id}`)
+    .then((res) => {
+      dispatch(fetchUsersResponse(res.data.users));
+    })
+    .catch(() => {});
+};

@@ -11,6 +11,17 @@ const columns = [
   { field: 'roles', headerName: 'Role', width: 150 },
 ];
 
+const giveAdmin = (e, users) => {
+  let index = e.tabIndex;
+  if (index > -1) {
+    if (users && users[index]?.roles == 'admin') {
+      users[index].roles = 'user';
+    } else if (users) {
+      users[index].roles = 'admin';
+    }
+  }
+};
+
 const Admin = () => {
   const { users } = useUsersContext();
 
@@ -21,7 +32,7 @@ const Admin = () => {
         columns={columns}
         pageSize={5}
         onCellClick={(e) => {
-          console.log(e);
+          giveAdmin(e, users);
         }}
         rowsPerPageOptions={[5]}
         checkboxSelection
